@@ -9,6 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockJobs, mockSkillsAnalysis, mockCompany } from "@/data/mockData";
 
+// Motivational components
+import MotivationalMessage from "@/components/motivation/MotivationalMessage";
+import MatchCelebration from "@/components/motivation/MatchCelebration";
+import BreathingExercise from "@/components/motivation/BreathingExercise";
+import SkillBadge from "@/components/motivation/SkillBadge";
+
 const JobDetail = () => {
   const { theme } = useTheme();
   const { id } = useParams();
@@ -84,7 +90,7 @@ const JobDetail = () => {
             
             <div className="flex flex-col gap-2">
               <Button 
-                variant={theme === "cyber" ? "default" : "default"} 
+                variant="default"
                 size="lg"
                 className={theme === "cyber" ? "cyber-mono uppercase cyber-glow" : ""}
               >
@@ -101,6 +107,40 @@ const JobDetail = () => {
           {theme === "newspaper" && <div className="newspaper-rule-double mt-6" />}
           {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mt-6" />}
         </header>
+
+        {/* Match Celebration Section */}
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          {/* Match Score with Celebration */}
+          <ThemedCard className="md:col-span-1">
+            <MatchCelebration 
+              matchPercentage={job.matchPercentage} 
+              size="lg"
+            />
+          </ThemedCard>
+          
+          {/* Motivational Message */}
+          <div className="md:col-span-2 flex flex-col gap-4">
+            <MotivationalMessage 
+              matchPercentage={job.matchPercentage}
+              skillsMatched={mockSkillsAnalysis.matchCount}
+              totalSkills={mockSkillsAnalysis.totalCount}
+              variant="banner"
+            />
+            
+            {/* Breathing exercise for lower matches or zen theme */}
+            {(job.matchPercentage < 70 || theme === "zen") && (
+              <div className="flex items-center gap-4">
+                <BreathingExercise compact />
+                <p className={`text-sm text-muted-foreground ${theme === "cyber" ? "cyber-mono" : "italic"}`}>
+                  {theme === "cyber" 
+                    ? "STRESS_LEVELS: MONITORING" 
+                    : "Take a moment if you need it"
+                  }
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
         
         {/* Tabs */}
         <Tabs defaultValue="overview" className="space-y-6">
@@ -128,7 +168,7 @@ const JobDetail = () => {
           </TabsList>
           
           <TabsContent value="overview" className="space-y-6">
-            {/* Skills Analysis */}
+            {/* Skills Analysis with motivational badges */}
             <ThemedCard variant="default">
               <div className="flex items-center justify-between mb-4">
                 <h3 className={`flex items-center gap-2 text-lg font-semibold ${
@@ -149,18 +189,24 @@ const JobDetail = () => {
                 {mockSkillsAnalysis.required.map((skill) => {
                   const isMatched = mockSkillsAnalysis.matched.includes(skill);
                   return (
-                    <ThemedBadge 
+                    <SkillBadge 
                       key={skill}
-                      variant={isMatched ? "success" : "default"}
-                    >
-                      <span className="flex items-center gap-1">
-                        {isMatched && <Check className="w-3 h-3" />}
-                        {skill}
-                      </span>
-                    </ThemedBadge>
+                      skill={skill}
+                      matched={isMatched}
+                    />
                   );
                 })}
               </div>
+              
+              {/* Encouragement based on skill match */}
+              {mockSkillsAnalysis.matchCount >= mockSkillsAnalysis.totalCount * 0.6 && (
+                <div className="mt-4 pt-4 border-t border-border">
+                  <MotivationalMessage 
+                    matchPercentage={job.matchPercentage}
+                    variant="inline"
+                  />
+                </div>
+              )}
             </ThemedCard>
             
             {/* AI Summary */}
@@ -173,7 +219,7 @@ const JobDetail = () => {
               </h3>
               
               <p className={`leading-relaxed mb-6 ${
-                theme === "newspaper" ? "drop-cap font-serif" : theme === "cyber" ? "cyber-mono text-sm" : ""
+                theme === "newspaper" ? "newspaper-drop-cap font-serif" : theme === "cyber" ? "cyber-mono text-sm" : ""
               }`}>
                 {mockCompany.whatTheyDo}
               </p>
@@ -224,8 +270,26 @@ const JobDetail = () => {
                 ))}
               </ul>
             </ThemedCard>
+            
+            {/* Encouragement after requirements */}
+            <MotivationalMessage 
+              matchPercentage={job.matchPercentage}
+              variant="banner"
+            />
           </TabsContent>
         </Tabs>
+        
+        {/* Calming section for zen theme or when match is lower */}
+        {(theme === "zen" || job.matchPercentage < 60) && (
+          <div className="mt-8">
+            <ThemedCard className="text-center p-8">
+              <h3 className={`text-xl font-semibold mb-4 ${theme === "cyber" ? "cyber-mono uppercase text-primary" : ""}`}>
+                {theme === "cyber" ? "WELLNESS_MODULE" : theme === "newspaper" ? "A Moment of Reflection" : "Take a Peaceful Moment"}
+              </h3>
+              <BreathingExercise />
+            </ThemedCard>
+          </div>
+        )}
         
         {/* Footer decoration */}
         <div className="mt-12 text-center">

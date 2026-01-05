@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, DollarSign, Clock, FileText, Star } from "lucide-react";
+import { MapPin, DollarSign, Clock, FileText, Star, Trophy, Sparkles } from "lucide-react";
 import { Job } from "@/types";
 
 interface ClassifiedAdProps {
@@ -7,6 +7,14 @@ interface ClassifiedAdProps {
   featured?: boolean;
   size?: "small" | "medium" | "large";
 }
+
+// Get motivational phrases based on match percentage
+const getMatchPhrase = (percentage: number) => {
+  if (percentage >= 85) return { text: "EXCEPTIONAL MATCH!", icon: Trophy, animate: true };
+  if (percentage >= 70) return { text: "Excellent Prospect!", icon: Star, animate: true };
+  if (percentage >= 50) return { text: "Promising Opportunity", icon: Sparkles, animate: false };
+  return { text: "Worth Exploring", icon: null, animate: false };
+};
 
 const ClassifiedAd = ({ job, featured = false, size = "medium" }: ClassifiedAdProps) => {
   if (size === "small") {
@@ -106,7 +114,7 @@ const ClassifiedAd = ({ job, featured = false, size = "medium" }: ClassifiedAdPr
           </span>
           <div className="flex-1 h-3 bg-card border border-rule-dark relative overflow-hidden">
             <div 
-              className="absolute inset-y-0 left-0 bg-stamp-red transition-all"
+              className={`absolute inset-y-0 left-0 bg-stamp-red transition-all ${job.matchPercentage >= 70 ? "animate-pulse" : ""}`}
               style={{ width: `${job.matchPercentage}%` }}
             />
             {/* Tick marks */}
@@ -120,6 +128,23 @@ const ClassifiedAd = ({ job, featured = false, size = "medium" }: ClassifiedAdPr
             {job.matchPercentage}%
           </span>
         </div>
+        
+        {/* Motivational phrase for high matches */}
+        {job.matchPercentage >= 50 && (
+          <div className={`mt-2 text-center ${job.matchPercentage >= 70 ? "animate-fade-in" : ""}`}>
+            {(() => {
+              const matchInfo = getMatchPhrase(job.matchPercentage);
+              return (
+                <span className={`inline-flex items-center gap-1 text-xs font-typewriter uppercase tracking-wider ${
+                  job.matchPercentage >= 70 ? "text-stamp-red font-bold" : "text-ink-faded"
+                }`}>
+                  {matchInfo.icon && <matchInfo.icon className={`w-3 h-3 ${matchInfo.animate ? "animate-pulse" : ""}`} />}
+                  {matchInfo.text}
+                </span>
+              );
+            })()}
+          </div>
+        )}
         
         {/* Footer note */}
         <div className="mt-3 pt-2 border-t border-dashed border-rule-light text-xs text-ink-faded italic text-center font-serif">
