@@ -136,12 +136,7 @@ const ZenHomeDesign3 = () => {
               <Link to="/jobs">
                 <Button size="lg" className="rounded-full px-8 text-base shadow-lg">
                   <FileUp className="w-4 h-4 mr-2" />
-                  Begin When You're Ready
-                </Button>
-              </Link>
-              <Link to="/jobs">
-                <Button variant="outline" size="lg" className="rounded-full px-8 text-base">
-                  Explore Gently
+                  Begin Your Journey
                 </Button>
               </Link>
             </div>
@@ -182,7 +177,7 @@ const ZenHomeDesign3 = () => {
               Two gentle ways to add jobs
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
-              No pressure. Choose what feels natural to you.
+              Choose what feels natural to you.
             </p>
           </motion.div>
 
@@ -198,7 +193,7 @@ const ZenHomeDesign3 = () => {
               { 
                 icon: ClipboardPaste, 
                 title: "Paste & Analyze", 
-                desc: "Found a job anywhere? Paste the description and let us gently extract insights. Simple, calm, effective.", 
+                desc: "Found a job anywhere? Paste the description and let us extract insights. Simple, calm, effective.", 
                 tag: "Flexible",
                 motivation: "Every path is valid"
               },
@@ -258,7 +253,7 @@ const ZenHomeDesign3 = () => {
                 step: "2", 
                 icon: Target, 
                 title: "Understand Your Fit", 
-                desc: "See alignment gently, not as judgment. Gaps are just opportunities to grow.",
+                desc: "See how your skills align without harsh judgment. Gaps are just opportunities to grow.",
                 affirmation: "You are more than a match percentage",
                 color: "from-emerald-400/20 to-teal-400/20"
               },
@@ -266,7 +261,7 @@ const ZenHomeDesign3 = () => {
                 step: "3", 
                 icon: Heart, 
                 title: "Move Forward With Confidence", 
-                desc: "Create cover letters and prepare for interviews feeling calm and ready.",
+                desc: "Research companies so you walk into interviews feeling informed and at ease.",
                 affirmation: "You belong in spaces that value you",
                 color: "from-amber-400/20 to-orange-400/20"
               },
@@ -324,7 +319,7 @@ const ZenHomeDesign3 = () => {
               {
                 icon: FileText,
                 title: "Thoughtful Cover Letters",
-                desc: "Generate letters that sound like you—authentic and confident",
+                desc: "Generate letters that sound like you, authentic and confident.",
                 motivation: "Your voice matters",
                 link: "/jobs"
               },
@@ -337,7 +332,7 @@ const ZenHomeDesign3 = () => {
               },
               {
                 icon: Target,
-                title: "Gentle Compatibility",
+                title: "Skill Analysis",
                 desc: "Understand your fit without harsh judgment or anxiety",
                 motivation: "Gaps are growth areas, not failures",
                 link: "/jobs"
@@ -388,76 +383,12 @@ const ZenHomeDesign3 = () => {
           >
             <Sparkles className="w-10 h-10 text-primary mx-auto mb-6" />
             <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
-              Remember: The best job for you is one that sees your <span className="text-primary font-medium">whole self</span>—
+              Remember: The best job for you is one that sees your <span className="text-primary font-medium">whole self</span> 
               not just your skills, but your potential, your values, your humanity.
             </p>
           </motion.div>
         </div>
       </section>
-
-      {/* Saved Jobs Preview */}
-      <section className="py-24 bg-gradient-to-b from-transparent to-primary/5">
-        <div className="container max-w-5xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-between mb-12"
-          >
-            <div>
-              <span className="text-sm text-primary uppercase tracking-widest mb-2 block">Your Curated Opportunities</span>
-              <h2 className="text-3xl md:text-4xl font-light text-foreground">
-                Jobs you've chosen
-              </h2>
-            </div>
-            <Link to="/jobs">
-              <Button variant="ghost" className="rounded-full">
-                View All
-                <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
-            </Link>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {mockJobs.slice(0, 4).map((job, i) => (
-              <motion.div
-                key={job.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <Link to={`/jobs/${job.id}`}>
-                  <MindfulCard 
-                    glowOnHover 
-                    className="hover:scale-[1.02] transition-all duration-300"
-                  >
-                    <div className="flex gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center text-primary font-semibold text-lg flex-shrink-0">
-                        {job.companyInitial}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <h3 className="font-medium text-foreground text-lg mb-1">{job.title}</h3>
-                            <p className="text-primary">{job.company}</p>
-                          </div>
-                          <div className="flex items-center gap-1 px-3 py-1 bg-primary/10 rounded-full">
-                            <Heart className="w-3 h-3 text-primary" />
-                            <span className="text-sm font-medium text-primary">{job.matchPercentage}%</span>
-                          </div>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-2">{job.location} • {job.type}</p>
-                      </div>
-                    </div>
-                  </MindfulCard>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Final CTA */}
       <section className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent" />
@@ -483,21 +414,14 @@ const ZenHomeDesign3 = () => {
             </h2>
             
             <p className="text-xl text-muted-foreground mb-10 max-w-xl mx-auto">
-              Whenever you're ready—no rush, no pressure. We'll be here to support 
-              every step of your journey with calm and compassion.
+              Take your time. Trust the process. You're doing better than you think.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/jobs">
                 <Button size="lg" className="rounded-full px-10 text-base shadow-lg">
                   <FileUp className="w-4 h-4 mr-2" />
-                  Begin Your Journey
-                </Button>
-              </Link>
-              <Link to="/company/felix-pago">
-                <Button variant="outline" size="lg" className="rounded-full px-10 text-base">
-                  <Building2 className="w-4 h-4 mr-2" />
-                  Explore Gently
+                  I'm ready!
                 </Button>
               </Link>
             </div>
