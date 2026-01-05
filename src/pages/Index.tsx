@@ -1,11 +1,14 @@
+import { Link } from "react-router-dom";
 import NewspaperMasthead from "@/components/NewspaperMasthead";
 import NewspaperSection from "@/components/NewspaperSection";
+import NewspaperNav from "@/components/NewspaperNav";
 import CVUploadCard from "@/components/CVUploadCard";
 import JobPostingCard from "@/components/JobPostingCard";
 import CompanyResearchCard from "@/components/CompanyResearchCard";
 import FeatureColumn from "@/components/FeatureColumn";
-import { FileText, Target, Building2, Sparkles } from "lucide-react";
+import { FileText, Target, Building2, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { mockJobs } from "@/data/mockData";
 
 const Index = () => {
   const features = [
@@ -31,6 +34,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background paper-texture">
+      {/* Navigation */}
+      <NewspaperNav />
+      
       {/* Masthead */}
       <NewspaperMasthead />
 
@@ -81,6 +87,52 @@ const Index = () => {
         </div>
       </NewspaperSection>
 
+      {/* Recent Jobs Preview */}
+      <section className="container max-w-6xl mx-auto px-4 py-12">
+        <div className="newspaper-rule-ornate mb-8" />
+        
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <span className="stamp">Latest</span>
+            <h2 className="headline-secondary mt-2">From The Classifieds</h2>
+          </div>
+          <Link to="/jobs">
+            <Button variant="edition">
+              View All Positions
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </Link>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-4">
+          {mockJobs.slice(0, 2).map((job) => (
+            <Link 
+              key={job.id} 
+              to={`/jobs/${job.id}`}
+              className="group"
+            >
+              <div className="bg-card border border-rule-light p-4 hover:border-rule-dark transition-all">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-stamp-red text-primary-foreground flex items-center justify-center font-display font-bold text-sm flex-shrink-0">
+                    {job.companyInitial}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-display font-semibold text-headline group-hover:text-stamp-red transition-colors truncate">
+                      {job.title}
+                    </h3>
+                    <p className="text-sm text-stamp-red">{job.company}</p>
+                    <p className="text-xs text-ink-faded mt-1">{job.location} • {job.type}</p>
+                  </div>
+                  <span className="font-display text-lg text-stamp-red font-bold">
+                    {job.matchPercentage}%
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* How It Works Section */}
       <section className="container max-w-6xl mx-auto px-4 py-12">
         <div className="newspaper-rule-ornate mb-8" />
@@ -90,7 +142,7 @@ const Index = () => {
             <h2 className="headline-secondary mb-4">How The Chronicle Works</h2>
             <div className="space-y-4 font-serif text-subheadline leading-relaxed">
               <p className="drop-cap">
-                Simply upload your resume and paste the job posting you're interested in. 
+                Simply upload your resume and paste the job posting you are interested in. 
                 Our intelligent system analyzes both documents, comparing your qualifications 
                 against the requirements.
               </p>
@@ -99,7 +151,7 @@ const Index = () => {
                 knowledge that transforms nervous candidates into confident professionals.
               </p>
               <p className="italic text-ink-faded">
-                "It's like having a career advisor, researcher, and coach all in your pocket."
+                "It is like having a career advisor, researcher, and coach all in your pocket."
                 <br />
                 <span className="not-italic text-xs">— A Satisfied Reader</span>
               </p>
@@ -109,7 +161,7 @@ const Index = () => {
           <div className="bg-paper-aged border-2 border-rule-dark p-8">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-stamp-red" />
-              <span className="font-typewriter text-sm uppercase tracking-wider">Editor's Pick</span>
+              <span className="font-typewriter text-sm uppercase tracking-wider">Editor&apos;s Pick</span>
             </div>
             <h3 className="headline-tertiary mb-3">Pro Tips for Success</h3>
             <ul className="space-y-2 font-serif text-sm text-subheadline">
@@ -130,9 +182,11 @@ const Index = () => {
                 Highlight relevant skills matching job requirements
               </li>
             </ul>
-            <Button variant="edition" className="w-full mt-6">
-              Read More Tips
-            </Button>
+            <Link to="/company/felix-pago">
+              <Button variant="edition" className="w-full mt-6">
+                See Sample Research
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
