@@ -13,12 +13,25 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ['Source Serif 4', 'Georgia', 'serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
+        typewriter: ['Special Elite', 'monospace'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        headline: "hsl(var(--headline))",
+        subheadline: "hsl(var(--subheadline))",
+        "ink-faded": "hsl(var(--ink-faded))",
+        "paper-aged": "hsl(var(--paper-aged))",
+        "rule-dark": "hsl(var(--rule-dark))",
+        "rule-light": "hsl(var(--rule-light))",
+        "stamp-red": "hsl(var(--stamp-red))",
+        "highlight-yellow": "hsl(var(--highlight-yellow))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -65,25 +78,38 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-in-left": {
+          "0%": { opacity: "0", transform: "translateX(-20px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "typewriter": {
+          "0%": { width: "0" },
+          "100%": { width: "100%" },
+        },
+        "stamp": {
+          "0%": { transform: "scale(2) rotate(-10deg)", opacity: "0" },
+          "50%": { transform: "scale(0.9) rotate(-2deg)", opacity: "1" },
+          "100%": { transform: "scale(1) rotate(-2deg)", opacity: "1" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.5s ease-out forwards",
+        "slide-in-left": "slide-in-left 0.5s ease-out forwards",
+        "typewriter": "typewriter 2s steps(40) forwards",
+        "stamp": "stamp 0.4s ease-out forwards",
       },
     },
   },
