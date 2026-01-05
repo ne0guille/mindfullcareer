@@ -1,104 +1,193 @@
 import { Link } from "react-router-dom";
-import NewspaperMasthead from "@/components/NewspaperMasthead";
-import NewspaperSection from "@/components/NewspaperSection";
-import NewspaperNav from "@/components/NewspaperNav";
+import { useTheme } from "@/contexts/ThemeContext";
+import ThemedLayout from "@/components/ThemedLayout";
+import ThemedMasthead from "@/components/ThemedMasthead";
+import ThemedSection from "@/components/ThemedSection";
+import ThemedCard from "@/components/ThemedCard";
+import ThemedFooter from "@/components/ThemedFooter";
 import CVUploadCard from "@/components/CVUploadCard";
 import JobPostingCard from "@/components/JobPostingCard";
 import CompanyResearchCard from "@/components/CompanyResearchCard";
-import FeatureColumn from "@/components/FeatureColumn";
-import { FileText, Target, Building2, Sparkles, ArrowRight } from "lucide-react";
+import { FileText, Target, Building2, Sparkles, ArrowRight, Brain, Cpu, Leaf, Heart, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockJobs } from "@/data/mockData";
 
 const Index = () => {
-  const features = [
-    {
-      icon: FileText,
-      title: "Resume Review",
-      description: "Our expert analysis examines every line of your curriculum vitae, identifying strengths and areas for improvement. We compare your experience against current market demands to ensure your resume stands out in today's competitive job market.",
-      number: "I",
-    },
-    {
-      icon: Target,
-      title: "Job Matching",
-      description: "Advanced algorithms match your skills and experience to job postings with remarkable precision. We highlight the key requirements you meet and suggest how to address any gaps, giving you a strategic advantage.",
-      number: "II",
-    },
-    {
-      icon: Building2,
-      title: "Company Intel",
-      description: "Before any interview, arm yourself with comprehensive company research. From recent news to company culture, leadership profiles to growth trajectory—we compile everything you need to impress your interviewers.",
-      number: "III",
-    },
-  ];
+  const { theme } = useTheme();
+
+  const features = {
+    newspaper: [
+      {
+        icon: FileText,
+        title: "Resume Review",
+        description: "Our expert analysis examines every line of your curriculum vitae, identifying strengths and areas for improvement.",
+        number: "I",
+      },
+      {
+        icon: Target,
+        title: "Job Matching",
+        description: "Advanced algorithms match your skills and experience to job postings with remarkable precision.",
+        number: "II",
+      },
+      {
+        icon: Building2,
+        title: "Company Intel",
+        description: "Before any interview, arm yourself with comprehensive company research and insider knowledge.",
+        number: "III",
+      },
+    ],
+    zen: [
+      {
+        icon: Heart,
+        title: "Mindful Analysis",
+        description: "Your resume, thoughtfully reviewed with care and attention to help you present your authentic self.",
+        number: "1",
+      },
+      {
+        icon: Leaf,
+        title: "Peaceful Matching",
+        description: "Find opportunities that align with your values and bring balance to your professional life.",
+        number: "2",
+      },
+      {
+        icon: Sparkles,
+        title: "Gentle Preparation",
+        description: "Prepare for interviews with calm confidence, knowing you have all the insights you need.",
+        number: "3",
+      },
+    ],
+    cyber: [
+      {
+        icon: Brain,
+        title: "Neural Resume Scan",
+        description: "AI-powered deep learning algorithms analyze your resume against 10M+ job postings in milliseconds.",
+        number: "01",
+      },
+      {
+        icon: Cpu,
+        title: "Quantum Matching",
+        description: "Precision job matching using advanced ML models with 99.7% accuracy on skill alignment.",
+        number: "02",
+      },
+      {
+        icon: Zap,
+        title: "Intel Synthesis",
+        description: "Real-time company data aggregation from 500+ sources, processed and delivered instantly.",
+        number: "03",
+      },
+    ],
+  };
+
+  const currentFeatures = features[theme];
 
   return (
-    <div className="min-h-screen bg-background paper-texture">
-      {/* Navigation */}
-      <NewspaperNav />
-      
+    <ThemedLayout>
       {/* Masthead */}
-      <NewspaperMasthead />
+      <ThemedMasthead />
 
       {/* Hero Section */}
       <section className="container max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <div className="inline-block mb-4">
-            <span className="stamp animate-stamp">Breaking News</span>
-          </div>
-          <h2 className="headline-primary mb-4">
-            Your Dream Job Awaits
+          {theme === "newspaper" && (
+            <div className="inline-block mb-4">
+              <span className="stamp animate-stamp">Breaking News</span>
+            </div>
+          )}
+          {theme === "zen" && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm mb-4">
+              <Heart className="w-4 h-4" />
+              Begin your peaceful journey
+            </div>
+          )}
+          {theme === "cyber" && (
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/30 text-primary text-sm mb-4 cyber-mono">
+              <Zap className="w-4 h-4" />
+              INITIALIZING CAREER PROTOCOL...
+            </div>
+          )}
+          
+          <h2 className={`headline-primary mb-4 ${theme === "cyber" ? "cyber-text-glow" : ""}`}>
+            {theme === "newspaper" && "Your Dream Job Awaits"}
+            {theme === "zen" && "Find Your Perfect Path"}
+            {theme === "cyber" && "OPTIMIZE YOUR CAREER"}
           </h2>
-          <p className="text-xl text-subheadline max-w-2xl mx-auto font-serif italic">
-            An extraordinary new tool has emerged to revolutionize the way professionals 
-            prepare for their next career opportunity. Experts predict unprecedented success rates.
+          
+          <p className={`text-xl max-w-2xl mx-auto ${theme === "newspaper" ? "text-subheadline font-serif italic" : theme === "cyber" ? "text-muted-foreground cyber-mono" : "text-muted-foreground"}`}>
+            {theme === "newspaper" && "An extraordinary new tool has emerged to revolutionize the way professionals prepare for their next career opportunity."}
+            {theme === "zen" && "Take a breath. Let go of stress. We are here to guide you gently toward opportunities that resonate with your spirit."}
+            {theme === "cyber" && "> Deploying advanced neural networks to maximize your career potential. Stand by for optimization."}
           </p>
         </div>
 
-        {/* Decorative double rule */}
-        <div className="newspaper-rule-double mb-8" />
-
         {/* Feature columns */}
-        <div className="grid md:grid-cols-3 gap-0 border-y border-rule-dark">
-          {features.map((feature) => (
-            <FeatureColumn key={feature.number} {...feature} />
+        {theme === "newspaper" && <div className="newspaper-rule-double mb-8" />}
+        {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-8" />}
+        
+        <div className={`grid md:grid-cols-3 gap-6 ${theme === "newspaper" ? "border-y border-rule-dark py-6" : ""}`}>
+          {currentFeatures.map((feature, index) => (
+            <ThemedCard 
+              key={feature.number} 
+              className="animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` } as React.CSSProperties}
+            >
+              <div className="flex items-start gap-3 mb-4">
+                <span className={`text-3xl font-bold ${theme === "cyber" ? "text-primary cyber-text-glow cyber-mono" : theme === "zen" ? "text-primary" : "text-stamp-red font-display"}`}>
+                  {feature.number}
+                </span>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <feature.icon className={`w-5 h-5 ${theme === "cyber" ? "text-primary" : theme === "zen" ? "text-primary" : "text-headline"}`} />
+                    <h3 className={`font-semibold ${theme === "cyber" ? "cyber-mono uppercase text-primary" : ""}`}>
+                      {feature.title}
+                    </h3>
+                  </div>
+                  <p className={`text-sm ${theme === "cyber" ? "text-muted-foreground cyber-mono" : "text-muted-foreground"}`}>
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            </ThemedCard>
           ))}
         </div>
       </section>
 
       {/* Main Action Cards */}
-      <NewspaperSection 
-        title="The Daily Toolkit" 
-        subtitle="Everything you need for your job search, in one place"
-        stamp="Extra!"
+      <ThemedSection 
+        title={theme === "cyber" ? "TOOLKIT.exe" : theme === "zen" ? "Your Tools" : "The Daily Toolkit"} 
+        subtitle={theme === "cyber" ? "Select module to initialize" : theme === "zen" ? "Choose your next step with intention" : "Everything you need for your job search"}
+        badge={theme === "newspaper" ? "Extra!" : theme === "cyber" ? "MODULES" : "Ready"}
       >
         <div className="container max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="animate-fade-in" style={{ animationDelay: "100ms" }}>
+            <div className="animate-fade-in delay-100">
               <CVUploadCard />
             </div>
-            <div className="animate-fade-in" style={{ animationDelay: "200ms" }}>
+            <div className="animate-fade-in delay-200">
               <JobPostingCard />
             </div>
-            <div className="animate-fade-in" style={{ animationDelay: "300ms" }}>
+            <div className="animate-fade-in delay-300">
               <CompanyResearchCard />
             </div>
           </div>
         </div>
-      </NewspaperSection>
+      </ThemedSection>
 
       {/* Recent Jobs Preview */}
       <section className="container max-w-6xl mx-auto px-4 py-12">
-        <div className="newspaper-rule-ornate mb-8" />
+        {theme === "newspaper" && <div className="newspaper-rule-ornate mb-8" />}
+        {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-8" />}
         
         <div className="flex items-center justify-between mb-6">
           <div>
-            <span className="stamp">Latest</span>
-            <h2 className="headline-secondary mt-2">From The Classifieds</h2>
+            {theme === "newspaper" && <span className="stamp">Latest</span>}
+            {theme === "cyber" && <span className="cyber-mono text-xs text-primary uppercase">[RECENT_JOBS]</span>}
+            <h2 className={`mt-2 ${theme === "cyber" ? "text-2xl font-bold text-primary cyber-text-glow cyber-mono uppercase" : "headline-secondary"}`}>
+              {theme === "newspaper" ? "From The Classifieds" : theme === "zen" ? "Recent Opportunities" : "JOB_LISTINGS.db"}
+            </h2>
           </div>
           <Link to="/jobs">
-            <Button variant="edition">
-              View All Positions
+            <Button variant={theme === "cyber" ? "default" : "outline"} className={theme === "cyber" ? "cyber-mono uppercase" : ""}>
+              {theme === "cyber" ? "ACCESS ALL" : "View All"}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
@@ -106,110 +195,37 @@ const Index = () => {
         
         <div className="grid md:grid-cols-2 gap-4">
           {mockJobs.slice(0, 2).map((job) => (
-            <Link 
-              key={job.id} 
-              to={`/jobs/${job.id}`}
-              className="group"
-            >
-              <div className="bg-card border border-rule-light p-4 hover:border-rule-dark transition-all">
+            <Link key={job.id} to={`/jobs/${job.id}`} className="group">
+              <ThemedCard className="hover:scale-[1.02] transition-transform">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-stamp-red text-primary-foreground flex items-center justify-center font-display font-bold text-sm flex-shrink-0">
+                  <div className={`w-10 h-10 flex items-center justify-center font-bold text-sm flex-shrink-0 ${
+                    theme === "cyber" 
+                      ? "bg-primary/20 border border-primary/50 text-primary" 
+                      : theme === "zen" 
+                        ? "bg-primary/10 rounded-full text-primary"
+                        : "bg-stamp-red text-primary-foreground"
+                  }`}>
                     {job.companyInitial}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-display font-semibold text-headline group-hover:text-stamp-red transition-colors truncate">
+                    <h3 className={`font-semibold truncate group-hover:text-primary transition-colors ${theme === "cyber" ? "cyber-mono uppercase text-sm" : ""}`}>
                       {job.title}
                     </h3>
-                    <p className="text-sm text-stamp-red">{job.company}</p>
-                    <p className="text-xs text-ink-faded mt-1">{job.location} • {job.type}</p>
+                    <p className={`text-sm ${theme === "cyber" ? "text-primary cyber-mono" : "text-primary"}`}>{job.company}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{job.location} • {job.type}</p>
                   </div>
-                  <span className="font-display text-lg text-stamp-red font-bold">
+                  <span className={`text-lg font-bold ${theme === "cyber" ? "text-primary cyber-text-glow cyber-mono" : "text-primary"}`}>
                     {job.matchPercentage}%
                   </span>
                 </div>
-              </div>
+              </ThemedCard>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section className="container max-w-6xl mx-auto px-4 py-12">
-        <div className="newspaper-rule-ornate mb-8" />
-        
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="headline-secondary mb-4">How The Chronicle Works</h2>
-            <div className="space-y-4 font-serif text-subheadline leading-relaxed">
-              <p className="drop-cap">
-                Simply upload your resume and paste the job posting you are interested in. 
-                Our intelligent system analyzes both documents, comparing your qualifications 
-                against the requirements.
-              </p>
-              <p>
-                Enter any company name to receive a comprehensive dossier—the kind of insider 
-                knowledge that transforms nervous candidates into confident professionals.
-              </p>
-              <p className="italic text-ink-faded">
-                "It is like having a career advisor, researcher, and coach all in your pocket."
-                <br />
-                <span className="not-italic text-xs">— A Satisfied Reader</span>
-              </p>
-            </div>
-          </div>
-          
-          <div className="bg-paper-aged border-2 border-rule-dark p-8">
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="w-5 h-5 text-stamp-red" />
-              <span className="font-typewriter text-sm uppercase tracking-wider">Editor&apos;s Pick</span>
-            </div>
-            <h3 className="headline-tertiary mb-3">Pro Tips for Success</h3>
-            <ul className="space-y-2 font-serif text-sm text-subheadline">
-              <li className="flex items-start gap-2">
-                <span className="text-stamp-red">•</span>
-                Update your CV for each application
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-stamp-red">•</span>
-                Research company culture before interviews
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-stamp-red">•</span>
-                Prepare questions about recent company news
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-stamp-red">•</span>
-                Highlight relevant skills matching job requirements
-              </li>
-            </ul>
-            <Link to="/company/felix-pago">
-              <Button variant="edition" className="w-full mt-6">
-                See Sample Research
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t-4 border-double border-rule-dark mt-12">
-        <div className="container max-w-6xl mx-auto px-4 py-8">
-          <div className="text-center">
-            <p className="font-display text-2xl text-headline mb-2">THE CAREER CHRONICLE</p>
-            <p className="text-sm text-ink-faded font-serif">
-              © 2025 All Rights Reserved • Your Success Is Our Headline
-            </p>
-            <div className="mt-4 flex justify-center gap-6 text-xs uppercase tracking-wider text-ink-faded">
-              <span>Privacy Policy</span>
-              <span>•</span>
-              <span>Terms of Service</span>
-              <span>•</span>
-              <span>Contact</span>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
+      <ThemedFooter />
+    </ThemedLayout>
   );
 };
 

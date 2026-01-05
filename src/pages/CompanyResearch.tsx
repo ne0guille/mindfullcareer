@@ -1,13 +1,17 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ExternalLink, RefreshCw, Copy, Search, Heart, Users, Trophy, Target, Newspaper, Sparkles } from "lucide-react";
-import NewspaperNav from "@/components/NewspaperNav";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, ExternalLink, RefreshCw, Copy, Heart, Users, Trophy, Target, Sparkles, Brain, Database, Shield } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import ThemedLayout from "@/components/ThemedLayout";
+import ThemedCard from "@/components/ThemedCard";
+import ThemedBadge from "@/components/ThemedBadge";
+import ThemedFooter from "@/components/ThemedFooter";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockCompany } from "@/data/mockData";
 import { toast } from "sonner";
 
 const CompanyResearch = () => {
+  const { theme } = useTheme();
   const { id } = useParams();
   const company = mockCompany;
 
@@ -37,21 +41,23 @@ Interview Tips:
 ${company.interviewTips.map(tip => `• ${tip}`).join("\n")}
     `;
     navigator.clipboard.writeText(notes);
-    toast.success("Notes copied to clipboard!");
+    toast.success(theme === "cyber" ? "Data copied to clipboard" : "Notes copied!");
   };
 
   return (
-    <div className="min-h-screen bg-background paper-texture">
-      <NewspaperNav />
-      
+    <ThemedLayout>
       <main className="container max-w-4xl mx-auto px-4 py-8">
         {/* Back link */}
         <Link 
           to="/" 
-          className="inline-flex items-center gap-2 text-sm text-ink-faded hover:text-headline font-serif mb-6"
+          className={`inline-flex items-center gap-2 text-sm mb-6 transition-colors ${
+            theme === "cyber" 
+              ? "text-primary cyber-mono uppercase hover:text-primary/80" 
+              : "text-muted-foreground hover:text-foreground"
+          }`}
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Front Page
+          {theme === "cyber" ? "< BACK_TO_HQ" : "Back to Home"}
         </Link>
         
         {/* Company Header */}
@@ -59,17 +65,36 @@ ${company.interviewTips.map(tip => `• ${tip}`).join("\n")}
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-4">
               {/* Company icon */}
-              <div className="w-16 h-16 bg-paper-aged border-2 border-rule-dark flex items-center justify-center">
-                <Newspaper className="w-8 h-8 text-headline" />
+              <div className={`w-16 h-16 flex items-center justify-center ${
+                theme === "cyber" 
+                  ? "bg-primary/20 border border-primary/50 cyber-glow" 
+                  : theme === "zen"
+                    ? "bg-primary/10 rounded-2xl"
+                    : "bg-paper-aged border-2 border-rule-dark"
+              }`}>
+                {theme === "cyber" 
+                  ? <Database className="w-8 h-8 text-primary" />
+                  : theme === "zen"
+                    ? <Heart className="w-8 h-8 text-primary" />
+                    : <Target className="w-8 h-8 text-headline" />
+                }
               </div>
               
               <div>
-                <h1 className="headline-primary text-3xl md:text-4xl mb-1">{company.name}</h1>
+                <h1 className={`mb-1 ${
+                  theme === "cyber" 
+                    ? "text-3xl font-bold text-primary cyber-text-glow cyber-mono uppercase" 
+                    : "headline-primary text-3xl"
+                }`}>
+                  {company.name}
+                </h1>
                 <a 
                   href={`https://${company.website}`} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-stamp-red font-serif hover:underline"
+                  className={`inline-flex items-center gap-1 hover:underline ${
+                    theme === "cyber" ? "text-primary cyber-mono" : "text-primary"
+                  }`}
                 >
                   {company.website}
                   <ExternalLink className="w-4 h-4" />
@@ -79,15 +104,14 @@ ${company.interviewTips.map(tip => `• ${tip}`).join("\n")}
             
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <p className="flex items-center gap-1 text-sm text-green-600 font-typewriter">
-                  <Search className="w-4 h-4" />
-                  Researched
-                </p>
-                <p className="text-xs text-ink-faded">{company.researchedAt}</p>
+                <ThemedBadge variant="success">
+                  {theme === "cyber" ? "RESEARCHED" : "Researched"}
+                </ThemedBadge>
+                <p className="text-xs text-muted-foreground mt-1">{company.researchedAt}</p>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className={theme === "cyber" ? "cyber-mono uppercase" : ""}>
                 <RefreshCw className="w-4 h-4 mr-2" />
-                Refresh Research
+                {theme === "cyber" ? "REFRESH" : "Refresh"}
               </Button>
             </div>
           </div>
@@ -95,242 +119,281 @@ ${company.interviewTips.map(tip => `• ${tip}`).join("\n")}
           {/* Progress bar */}
           <div className="mt-6 flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-display text-green-600 font-semibold">
-                {company.completionPercentage}% Complete
+              <span className={`text-sm font-semibold ${
+                theme === "cyber" ? "text-primary cyber-mono" : "text-green-600"
+              }`}>
+                {company.completionPercentage}% {theme === "cyber" ? "COMPLETE" : "Complete"}
               </span>
-              <div className="w-32 h-2 bg-secondary overflow-hidden">
+              <div className={`w-32 h-2 overflow-hidden bg-muted ${theme === "zen" ? "rounded-full" : ""}`}>
                 <div 
-                  className="h-full bg-green-500 transition-all"
+                  className={`h-full transition-all ${
+                    theme === "cyber" ? "bg-primary cyber-glow" : "bg-green-500"
+                  }`}
                   style={{ width: `${company.completionPercentage}%` }}
                 />
               </div>
             </div>
             
             <div className="ml-auto">
-              <Button variant="edition" size="sm" onClick={handleCopyNotes}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleCopyNotes}
+                className={theme === "cyber" ? "cyber-mono uppercase" : ""}
+              >
                 <Copy className="w-4 h-4 mr-2" />
-                Copy All Notes
+                {theme === "cyber" ? "COPY_DATA" : "Copy All Notes"}
               </Button>
             </div>
           </div>
           
-          <div className="newspaper-rule-double mt-6" />
+          {theme === "newspaper" && <div className="newspaper-rule-double mt-6" />}
+          {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mt-6" />}
         </header>
         
         {/* Tabs */}
         <Tabs defaultValue="company" className="space-y-6">
-          <TabsList className="bg-secondary w-full justify-start gap-0 p-0 h-auto flex-wrap">
+          <TabsList className={`w-full justify-start gap-0 p-0 h-auto flex-wrap ${
+            theme === "cyber" ? "bg-muted/50 border border-primary/20" : "bg-muted"
+          }`}>
             <TabsTrigger 
               value="interview"
-              className="flex items-center gap-2 px-4 py-3 font-display text-xs uppercase tracking-wide data-[state=active]:bg-headline data-[state=active]:text-card rounded-none"
+              className={`flex items-center gap-2 px-4 py-3 text-xs rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground ${
+                theme === "cyber" ? "cyber-mono uppercase" : ""
+              }`}
             >
-              <Sparkles className="w-4 h-4" />
-              Interview Prep
+              {theme === "cyber" ? <Brain className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
+              {theme === "cyber" ? "INTERVIEW" : "Interview Prep"}
             </TabsTrigger>
             <TabsTrigger 
               value="company"
-              className="flex items-center gap-2 px-4 py-3 font-display text-xs uppercase tracking-wide data-[state=active]:bg-headline data-[state=active]:text-card rounded-none"
+              className={`flex items-center gap-2 px-4 py-3 text-xs rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground ${
+                theme === "cyber" ? "cyber-mono uppercase" : ""
+              }`}
             >
-              <Newspaper className="w-4 h-4" />
-              Company
+              <Target className="w-4 h-4" />
+              {theme === "cyber" ? "COMPANY" : "Company"}
             </TabsTrigger>
             <TabsTrigger 
               value="team"
-              className="flex items-center gap-2 px-4 py-3 font-display text-xs uppercase tracking-wide data-[state=active]:bg-headline data-[state=active]:text-card rounded-none"
+              className={`flex items-center gap-2 px-4 py-3 text-xs rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground ${
+                theme === "cyber" ? "cyber-mono uppercase" : ""
+              }`}
             >
               <Users className="w-4 h-4" />
-              Team
+              {theme === "cyber" ? "TEAM" : "Team"}
             </TabsTrigger>
             <TabsTrigger 
               value="news"
-              className="flex items-center gap-2 px-4 py-3 font-display text-xs uppercase tracking-wide data-[state=active]:bg-headline data-[state=active]:text-card rounded-none"
+              className={`flex items-center gap-2 px-4 py-3 text-xs rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground ${
+                theme === "cyber" ? "cyber-mono uppercase" : ""
+              }`}
             >
               <Trophy className="w-4 h-4" />
-              News
+              {theme === "cyber" ? "NEWS" : "News"}
             </TabsTrigger>
           </TabsList>
           
           {/* Interview Prep Tab */}
           <TabsContent value="interview" className="space-y-6">
-            <Card variant="headline">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-stamp-red" />
-                  Interview Preparation Guide
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="font-serif text-subheadline italic">
-                  Our correspondents have compiled essential preparation tips for your upcoming interview.
-                </p>
-                
-                <div className="space-y-3 mt-4">
-                  {company.interviewTips.map((tip, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-paper-aged border-l-4 border-stamp-red">
-                      <span className="font-display text-2xl text-stamp-red font-bold">
-                        {index + 1}
-                      </span>
-                      <p className="font-serif text-subheadline pt-1">{tip}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <ThemedCard variant="highlight">
+              <h3 className={`flex items-center gap-2 text-lg font-semibold mb-4 ${
+                theme === "cyber" ? "text-primary cyber-mono uppercase" : ""
+              }`}>
+                {theme === "cyber" ? <Brain className="w-5 h-5 text-primary" /> : <Sparkles className="w-5 h-5 text-primary" />}
+                {theme === "cyber" ? "INTERVIEW_PROTOCOL" : theme === "zen" ? "Preparation Guide" : "Interview Preparation Guide"}
+              </h3>
+              
+              <p className={`mb-6 ${theme === "cyber" ? "cyber-mono text-sm text-muted-foreground" : "text-muted-foreground italic"}`}>
+                {theme === "cyber" 
+                  ? "> Compiled preparation data for optimal interview performance."
+                  : "Essential tips to help you feel confident and prepared."
+                }
+              </p>
+              
+              <div className="space-y-3">
+                {company.interviewTips.map((tip, index) => (
+                  <div key={index} className={`flex items-start gap-4 p-4 ${
+                    theme === "cyber" 
+                      ? "bg-primary/5 border-l-2 border-primary" 
+                      : theme === "zen"
+                        ? "bg-primary/5 rounded-lg border-l-4 border-primary"
+                        : "bg-paper-aged border-l-4 border-primary"
+                  }`}>
+                    <span className={`text-2xl font-bold ${
+                      theme === "cyber" ? "text-primary cyber-mono" : "text-primary font-display"
+                    }`}>
+                      {theme === "cyber" ? `0${index + 1}` : index + 1}
+                    </span>
+                    <p className={theme === "cyber" ? "cyber-mono text-sm pt-1" : "pt-1"}>{tip}</p>
+                  </div>
+                ))}
+              </div>
+            </ThemedCard>
           </TabsContent>
           
           {/* Company Tab */}
           <TabsContent value="company" className="space-y-6">
-            <Card variant="newspaper">
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <Newspaper className="w-6 h-6 text-headline" />
-                  <div>
-                    <CardTitle>{company.name}</CardTitle>
-                    <p className="text-sm text-ink-faded font-serif">
-                      {company.industry} • {company.type} • "{company.tagline}"
-                    </p>
+            <ThemedCard variant="default">
+              <div className="flex items-center gap-3 mb-4">
+                <Target className={`w-6 h-6 ${theme === "cyber" ? "text-primary" : "text-headline"}`} />
+                <div>
+                  <h3 className={`text-lg font-semibold ${theme === "cyber" ? "text-primary cyber-mono uppercase" : ""}`}>
+                    {company.name}
+                  </h3>
+                  <p className={`text-sm ${theme === "cyber" ? "cyber-mono text-muted-foreground" : "text-muted-foreground"}`}>
+                    {company.industry} • {company.type} • "{company.tagline}"
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+                <Users className="w-4 h-4" />
+                <span className={theme === "cyber" ? "cyber-mono uppercase text-xs" : "uppercase tracking-wider text-xs"}>
+                  {theme === "cyber" ? "SIZE:" : "Size:"}
+                </span>
+                <span>{company.size}</span>
+              </div>
+              
+              <div className="space-y-6">
+                {[
+                  { label: theme === "cyber" ? "MISSION" : "What They Do", content: company.whatTheyDo },
+                  { label: theme === "cyber" ? "PROBLEM_SOLVED" : "Problem Solved", content: company.problemSolved },
+                  { label: theme === "cyber" ? "VALUE_PROP" : "Value Proposition", content: company.valueProposition },
+                ].map((section) => (
+                  <div key={section.label}>
+                    <h4 className={`font-semibold mb-2 ${
+                      theme === "cyber" ? "text-primary cyber-mono uppercase text-sm" : "text-primary"
+                    }`}>
+                      {section.label}
+                    </h4>
+                    <p className={theme === "cyber" ? "cyber-mono text-sm" : ""}>{section.content}</p>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center gap-2 text-sm text-subheadline">
-                  <Users className="w-4 h-4 text-ink-faded" />
-                  <span className="font-typewriter uppercase text-xs text-ink-faded">Size:</span>
-                  <span className="font-serif">{company.size}</span>
-                </div>
+                ))}
                 
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="text-stamp-red font-display font-semibold mb-2">What They Do</h4>
-                    <p className="font-serif text-subheadline leading-relaxed">{company.whatTheyDo}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-stamp-red font-display font-semibold mb-2">Problem Solved</h4>
-                    <p className="font-serif text-subheadline">{company.problemSolved}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-stamp-red font-display font-semibold mb-2">Value Proposition</h4>
-                    <p className="font-serif text-subheadline">{company.valueProposition}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-stamp-red font-display font-semibold mb-2">Target Customers</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {company.targetCustomers.map((customer) => (
-                        <span 
-                          key={customer}
-                          className="px-3 py-1 bg-paper-aged border border-rule-light font-serif text-sm text-subheadline"
-                        >
-                          {customer}
-                        </span>
-                      ))}
-                    </div>
+                <div>
+                  <h4 className={`font-semibold mb-2 ${
+                    theme === "cyber" ? "text-primary cyber-mono uppercase text-sm" : "text-primary"
+                  }`}>
+                    {theme === "cyber" ? "TARGET_CUSTOMERS" : "Target Customers"}
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {company.targetCustomers.map((customer) => (
+                      <ThemedBadge key={customer}>{customer}</ThemedBadge>
+                    ))}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </ThemedCard>
             
             {/* Core Values */}
-            <Card variant="headline">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-stamp-red" />
-                  Core Values
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {company.coreValues.map((value) => (
-                    <div 
-                      key={value}
-                      className="text-center p-4 bg-paper-aged border border-rule-light"
-                    >
-                      <p className="font-display font-semibold text-headline">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <ThemedCard variant="highlight">
+              <h3 className={`flex items-center gap-2 text-lg font-semibold mb-4 ${
+                theme === "cyber" ? "text-primary cyber-mono uppercase" : ""
+              }`}>
+                {theme === "cyber" ? <Shield className="w-5 h-5 text-primary" /> : <Heart className="w-5 h-5 text-primary" />}
+                {theme === "cyber" ? "CORE_VALUES" : "Core Values"}
+              </h3>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {company.coreValues.map((value) => (
+                  <ThemedCard 
+                    key={value}
+                    variant="default" 
+                    className={`text-center p-4 ${theme === "cyber" ? "cyber-pulse" : ""}`}
+                  >
+                    <p className={`font-semibold ${theme === "cyber" ? "cyber-mono uppercase text-primary text-sm" : ""}`}>
+                      {value}
+                    </p>
+                  </ThemedCard>
+                ))}
+              </div>
+            </ThemedCard>
           </TabsContent>
           
           {/* Team Tab */}
           <TabsContent value="team" className="space-y-6">
-            <Card variant="newspaper">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-stamp-red" />
-                  Team Culture
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-paper-aged border border-rule-light">
-                    <p className="text-xs text-stamp-red font-typewriter uppercase tracking-wider mb-2 flex items-center gap-2">
-                      <Target className="w-4 h-4" />
-                      Key Focus
-                    </p>
-                    <p className="font-serif text-subheadline">{company.keyFocus}</p>
-                  </div>
-                  <div className="p-4 bg-paper-aged border border-rule-light">
-                    <p className="text-xs text-stamp-red font-typewriter uppercase tracking-wider mb-2 flex items-center gap-2">
-                      <Users className="w-4 h-4" />
-                      Team Style
-                    </p>
-                    <p className="font-serif text-subheadline">{company.teamStyle}</p>
-                  </div>
-                </div>
-                
-                <p className="font-serif text-ink-faded italic text-sm mt-4">
-                  Additional team insights will be available after connecting with Lovable Cloud for deeper research capabilities.
-                </p>
-              </CardContent>
-            </Card>
+            <ThemedCard variant="default">
+              <h3 className={`flex items-center gap-2 text-lg font-semibold mb-4 ${
+                theme === "cyber" ? "text-primary cyber-mono uppercase" : ""
+              }`}>
+                <Users className={`w-5 h-5 ${theme === "cyber" ? "text-primary" : "text-primary"}`} />
+                {theme === "cyber" ? "TEAM_CULTURE" : "Team Culture"}
+              </h3>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <ThemedCard variant="default" className="p-4">
+                  <p className={`text-xs mb-2 flex items-center gap-2 ${
+                    theme === "cyber" ? "cyber-mono text-primary uppercase" : "text-primary uppercase tracking-wider"
+                  }`}>
+                    <Target className="w-4 h-4" />
+                    {theme === "cyber" ? "KEY_FOCUS" : "Key Focus"}
+                  </p>
+                  <p className={theme === "cyber" ? "cyber-mono text-sm" : ""}>{company.keyFocus}</p>
+                </ThemedCard>
+                <ThemedCard variant="default" className="p-4">
+                  <p className={`text-xs mb-2 flex items-center gap-2 ${
+                    theme === "cyber" ? "cyber-mono text-primary uppercase" : "text-primary uppercase tracking-wider"
+                  }`}>
+                    <Users className="w-4 h-4" />
+                    {theme === "cyber" ? "TEAM_STYLE" : "Team Style"}
+                  </p>
+                  <p className={theme === "cyber" ? "cyber-mono text-sm" : ""}>{company.teamStyle}</p>
+                </ThemedCard>
+              </div>
+            </ThemedCard>
           </TabsContent>
           
           {/* News Tab */}
           <TabsContent value="news" className="space-y-6">
-            <Card variant="headline">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-stamp-red" />
-                  Recent Headlines
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {company.recentNews.map((news, index) => (
-                    <div 
-                      key={index}
-                      className="flex items-start gap-4 pb-4 border-b border-rule-light last:border-0 last:pb-0"
-                    >
-                      <span className="font-display text-3xl text-stamp-red font-black">
-                        {index + 1}
-                      </span>
-                      <div>
-                        <p className="font-display font-semibold text-headline">{news}</p>
-                        <p className="text-xs text-ink-faded font-typewriter mt-1">
-                          BREAKING • Just In
-                        </p>
-                      </div>
+            <ThemedCard variant="highlight">
+              <h3 className={`flex items-center gap-2 text-lg font-semibold mb-4 ${
+                theme === "cyber" ? "text-primary cyber-mono uppercase" : ""
+              }`}>
+                <Trophy className={`w-5 h-5 ${theme === "cyber" ? "text-primary" : "text-primary"}`} />
+                {theme === "cyber" ? "RECENT_DATA" : "Recent Headlines"}
+              </h3>
+              
+              <div className="space-y-4">
+                {company.recentNews.map((news, index) => (
+                  <div 
+                    key={index}
+                    className={`flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0 ${
+                      theme === "cyber" ? "border-primary/20" : "border-border"
+                    }`}
+                  >
+                    <span className={`text-3xl font-bold ${
+                      theme === "cyber" ? "text-primary cyber-mono" : "text-primary font-display"
+                    }`}>
+                      {theme === "cyber" ? `0${index + 1}` : index + 1}
+                    </span>
+                    <div>
+                      <p className={`font-semibold ${theme === "cyber" ? "cyber-mono uppercase text-sm" : ""}`}>
+                        {news}
+                      </p>
+                      <ThemedBadge variant="info" className="mt-2">
+                        {theme === "cyber" ? "RECENT" : "Breaking"}
+                      </ThemedBadge>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
+                ))}
+              </div>
+            </ThemedCard>
           </TabsContent>
         </Tabs>
         
         {/* Footer decoration */}
         <div className="mt-12 text-center">
-          <div className="newspaper-rule-ornate mb-4" />
-          <p className="text-xs text-ink-faded font-typewriter uppercase tracking-widest">
-            — End of Investigation Report —
+          {theme === "newspaper" && <div className="newspaper-rule-ornate mb-4" />}
+          {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-4" />}
+          <p className={`text-xs ${theme === "cyber" ? "cyber-mono text-primary uppercase" : "text-muted-foreground uppercase tracking-widest"}`}>
+            {theme === "cyber" ? "— END_OF_INTEL —" : "— End of Investigation Report —"}
           </p>
         </div>
       </main>
-    </div>
+      
+      <ThemedFooter />
+    </ThemedLayout>
   );
 };
 

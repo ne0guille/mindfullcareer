@@ -1,9 +1,11 @@
-import { Upload, FileText } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Upload, FileText, Brain, Leaf } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import ThemedCard from "@/components/ThemedCard";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const CVUploadCard = () => {
+  const { theme } = useTheme();
   const [isDragOver, setIsDragOver] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
 
@@ -32,61 +34,86 @@ const CVUploadCard = () => {
     }
   };
 
+  const icons = {
+    newspaper: FileText,
+    zen: Leaf,
+    cyber: Brain,
+  };
+
+  const Icon = icons[theme];
+
   return (
-    <Card variant="headline" className="h-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="w-6 h-6 text-stamp-red" />
-          Upload Your CV
-        </CardTitle>
-        <CardDescription>
-          Submit your curriculum vitae for expert analysis
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={`
-            relative border-2 border-dashed rounded p-8 text-center transition-all
-            ${isDragOver 
-              ? 'border-stamp-red bg-stamp-red/5' 
-              : 'border-rule-light hover:border-rule-dark'
-            }
-          `}
-        >
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            onChange={handleFileChange}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          />
-          
-          <Upload className={`w-12 h-12 mx-auto mb-4 ${isDragOver ? 'text-stamp-red' : 'text-ink-faded'}`} />
-          
-          {fileName ? (
-            <div className="space-y-2">
-              <p className="font-display text-lg text-headline">{fileName}</p>
-              <p className="text-sm text-ink-faded">File ready for analysis</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <p className="font-display text-lg text-headline">
-                Drop your CV here
-              </p>
-              <p className="text-sm text-ink-faded">
-                or click to browse • PDF, DOC, DOCX
-              </p>
-            </div>
-          )}
-        </div>
+    <ThemedCard variant="highlight" className="h-full">
+      <div className="mb-4">
+        <h3 className={`flex items-center gap-2 text-lg font-semibold mb-1 ${
+          theme === "cyber" ? "text-primary cyber-mono uppercase" : ""
+        }`}>
+          <Icon className={`w-5 h-5 ${theme === "cyber" ? "text-primary" : "text-primary"}`} />
+          {theme === "cyber" ? "UPLOAD_CV" : theme === "zen" ? "Share Your Resume" : "Upload Your CV"}
+        </h3>
+        <p className={`text-sm ${theme === "cyber" ? "cyber-mono text-muted-foreground" : "text-muted-foreground"}`}>
+          {theme === "cyber" 
+            ? "> Submit resume for neural analysis"
+            : theme === "zen"
+              ? "Let us help you present your best self"
+              : "Submit your curriculum vitae for expert analysis"
+          }
+        </p>
+      </div>
+      
+      <div
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`
+          relative border-2 border-dashed p-8 text-center transition-all
+          ${theme === "zen" ? "rounded-xl" : ""}
+          ${isDragOver 
+            ? "border-primary bg-primary/5" 
+            : "border-border hover:border-primary/50"
+          }
+        `}
+      >
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx"
+          onChange={handleFileChange}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
         
-        <Button variant="newspaper" className="w-full mt-4" size="lg">
-          Analyze Resume
-        </Button>
-      </CardContent>
-    </Card>
+        <Upload className={`w-12 h-12 mx-auto mb-4 ${
+          isDragOver ? "text-primary" : "text-muted-foreground"
+        } ${theme === "cyber" && isDragOver ? "cyber-pulse" : ""}`} />
+        
+        {fileName ? (
+          <div className="space-y-2">
+            <p className={`text-lg font-semibold ${theme === "cyber" ? "text-primary cyber-mono" : "text-foreground"}`}>
+              {fileName}
+            </p>
+            <p className={`text-sm ${theme === "cyber" ? "cyber-mono" : ""} text-muted-foreground`}>
+              {theme === "cyber" ? "FILE_READY" : "File ready for analysis"}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <p className={`text-lg font-semibold ${theme === "cyber" ? "cyber-mono uppercase text-primary" : ""}`}>
+              {theme === "cyber" ? "DROP_FILE_HERE" : "Drop your CV here"}
+            </p>
+            <p className={`text-sm text-muted-foreground ${theme === "cyber" ? "cyber-mono" : ""}`}>
+              {theme === "cyber" ? "or click to browse • .PDF .DOC .DOCX" : "or click to browse • PDF, DOC, DOCX"}
+            </p>
+          </div>
+        )}
+      </div>
+      
+      <Button 
+        variant={theme === "cyber" ? "default" : "default"} 
+        className={`w-full mt-4 ${theme === "cyber" ? "cyber-mono uppercase" : ""}`}
+        size="lg"
+      >
+        {theme === "cyber" ? "ANALYZE_RESUME" : theme === "zen" ? "Begin Analysis" : "Analyze Resume"}
+      </Button>
+    </ThemedCard>
   );
 };
 
