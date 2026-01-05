@@ -2,9 +2,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { 
-  Compass, Palette, BookOpen, Coffee, 
+  Compass, FileUp, Chrome, ClipboardPaste, 
   ChevronRight, Star, Heart, Sparkles,
-  FileText, Search, Building2
+  FileText, Target, Building2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockJobs } from "@/data/mockData";
@@ -18,10 +18,10 @@ const ZenHomeDesign3 = () => {
   const [activeInsight, setActiveInsight] = useState(0);
 
   const insights = [
-    "Your skills tell a story worth sharing",
-    "Every interview is a conversation, not a test",
-    "The right opportunity will feel like coming home",
-    "Your experience has prepared you for this moment"
+    "You curate the opportunities, not algorithms",
+    "Understand your fit before you apply",
+    "Interview with confidence, not anxiety",
+    "Your unique journey deserves thoughtful tools"
   ];
 
   return (
@@ -77,19 +77,19 @@ const ZenHomeDesign3 = () => {
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-foreground leading-[1.1] mb-8">
-              Find your
+              Not a job board.
               <motion.span
                 className="block text-primary font-medium"
                 animate={{ opacity: [0.7, 1, 0.7] }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
-                true direction
+                Your job companion.
               </motion.span>
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12 font-light">
-              A mindful approach to discovering career opportunities 
-              that align with your authentic self.
+              You save jobs that interest you. We help you understand your fit, 
+              craft cover letters, and research companies—all without the stress.
             </p>
 
             {/* Rotating insights */}
@@ -120,20 +120,25 @@ const ZenHomeDesign3 = () => {
               ))}
             </div>
 
-            {/* Scroll indicator */}
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="flex flex-col items-center text-muted-foreground"
-            >
-              <span className="text-sm mb-2">Explore</span>
-              <ChevronRight className="w-5 h-5 rotate-90" />
-            </motion.div>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/jobs">
+                <Button size="lg" className="rounded-full px-8 text-base shadow-lg">
+                  <FileUp className="w-4 h-4 mr-2" />
+                  Upload Your CV
+                </Button>
+              </Link>
+              <Link to="/jobs">
+                <Button variant="outline" size="lg" className="rounded-full px-8 text-base">
+                  Explore Your Jobs
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Interactive Cards Section */}
+      {/* How It Works */}
       <section className="py-24 bg-gradient-to-b from-background to-primary/5">
         <div className="container max-w-6xl mx-auto px-4">
           <motion.div
@@ -142,37 +147,108 @@ const ZenHomeDesign3 = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-sm text-primary uppercase tracking-widest mb-4 block">Your Toolkit</span>
+            <span className="text-sm text-primary uppercase tracking-widest mb-4 block">Your Journey</span>
             <h2 className="text-4xl md:text-5xl font-light text-foreground">
-              Three paths to clarity
+              Simple steps, peaceful process
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-4 gap-6">
+            {[
+              { 
+                icon: FileUp, 
+                title: "Upload CV",
+                desc: "Share your experience and skills with us",
+                step: "1"
+              },
+              { 
+                icon: Chrome, 
+                title: "Save Jobs",
+                desc: "Use our Chrome extension on LinkedIn or paste descriptions",
+                step: "2"
+              },
+              { 
+                icon: Target, 
+                title: "See Your Fit",
+                desc: "Understand compatibility without judgment",
+                step: "3"
+              },
+              { 
+                icon: Sparkles, 
+                title: "Prepare",
+                desc: "Generate cover letters and research companies",
+                step: "4"
+              }
+            ].map((card, i) => (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+              >
+                <motion.div
+                  whileHover={{ y: -8 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="relative h-full p-6 rounded-3xl bg-card/60 border border-primary/10 text-center"
+                >
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
+                    {card.step}
+                  </div>
+                  
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mt-4 mb-4">
+                    <card.icon className="w-7 h-7 text-primary" />
+                  </div>
+                  
+                  <h3 className="text-lg font-medium text-foreground mb-2">{card.title}</h3>
+                  <p className="text-sm text-muted-foreground">{card.desc}</p>
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Cards */}
+      <section className="py-24">
+        <div className="container max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-sm text-primary uppercase tracking-widest mb-4 block">Mindful Tools</span>
+            <h2 className="text-4xl md:text-5xl font-light text-foreground">
+              Everything to reduce anxiety
             </h2>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { 
-                icon: FileText, 
-                title: "Resume Reflection",
-                desc: "See your experience through fresh eyes",
-                color: "from-rose-500/20 to-pink-500/20",
-                link: "/jobs",
-                features: ["Thoughtful analysis", "Strength discovery", "Gentle guidance"]
-              },
-              { 
-                icon: Search, 
-                title: "Opportunity Discovery",
-                desc: "Find roles that resonate with your values",
+                icon: Target, 
+                title: "Compatibility Insights",
+                desc: "See skill matches presented gently, not as pass/fail",
                 color: "from-emerald-500/20 to-teal-500/20",
                 link: "/jobs",
-                features: ["Value alignment", "Skill matching", "Culture fit"]
+                features: ["Skill alignment", "Gap awareness", "Growth opportunities"]
+              },
+              { 
+                icon: FileText, 
+                title: "Cover Letter Studio",
+                desc: "Generate authentic letters tailored to each role",
+                color: "from-rose-500/20 to-pink-500/20",
+                link: "/jobs",
+                features: ["Personalized tone", "Key highlights", "Easy editing"]
               },
               { 
                 icon: Building2, 
-                title: "Company Insight",
-                desc: "Understand where you might belong",
+                title: "Company Research",
+                desc: "Understand culture before the interview",
                 color: "from-violet-500/20 to-purple-500/20",
                 link: "/company/felix-pago",
-                features: ["Culture preview", "Team dynamics", "Growth paths"]
+                features: ["Culture insights", "Interview prep", "Calm confidence"]
               }
             ].map((card, i) => (
               <motion.div
@@ -216,7 +292,7 @@ const ZenHomeDesign3 = () => {
                       </ul>
 
                       <div className="mt-6 flex items-center text-primary font-medium">
-                        <span>Begin</span>
+                        <span>Explore</span>
                         <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-transform" />
                       </div>
                     </div>
@@ -228,8 +304,8 @@ const ZenHomeDesign3 = () => {
         </div>
       </section>
 
-      {/* Featured Opportunities - Card Stack Style */}
-      <section className="py-24">
+      {/* Saved Jobs Preview */}
+      <section className="py-24 bg-gradient-to-b from-transparent to-primary/5">
         <div className="container max-w-5xl mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -238,9 +314,9 @@ const ZenHomeDesign3 = () => {
             className="flex items-center justify-between mb-12"
           >
             <div>
-              <span className="text-sm text-primary uppercase tracking-widest mb-2 block">Curated for you</span>
+              <span className="text-sm text-primary uppercase tracking-widest mb-2 block">Your Jobs</span>
               <h2 className="text-3xl md:text-4xl font-light text-foreground">
-                Opportunities with purpose
+                Opportunities you've saved
               </h2>
             </div>
             <Link to="/jobs">
@@ -291,7 +367,7 @@ const ZenHomeDesign3 = () => {
         </div>
       </section>
 
-      {/* Final CTA - Meditation Style */}
+      {/* Final CTA */}
       <section className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent" />
         
@@ -307,29 +383,29 @@ const ZenHomeDesign3 = () => {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 mb-10"
             >
-              <Sparkles className="w-12 h-12 text-primary" />
+              <FileUp className="w-12 h-12 text-primary" />
             </motion.div>
 
             <h2 className="text-4xl md:text-5xl font-light text-foreground mb-6">
-              Your journey begins
-              <span className="block text-primary">with intention</span>
+              Ready to take control
+              <span className="block text-primary">of your job search?</span>
             </h2>
             
             <p className="text-xl text-muted-foreground mb-10 max-w-xl mx-auto">
-              Close your eyes. Take a breath. When you're ready, 
-              we'll be here to guide you forward.
+              Upload your CV and start building your curated collection of opportunities.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/jobs">
                 <Button size="lg" className="rounded-full px-10 text-base shadow-lg">
-                  I'm Ready
+                  <FileUp className="w-4 h-4 mr-2" />
+                  Upload CV & Begin
                 </Button>
               </Link>
               <Link to="/company/felix-pago">
                 <Button variant="outline" size="lg" className="rounded-full px-10 text-base">
-                  <Coffee className="w-4 h-4 mr-2" />
-                  Take It Slow
+                  <Building2 className="w-4 h-4 mr-2" />
+                  See Company Research
                 </Button>
               </Link>
             </div>
