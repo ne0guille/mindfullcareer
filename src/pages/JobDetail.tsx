@@ -89,14 +89,16 @@ const JobDetail = () => {
             </div>
             
             <div className="flex flex-col gap-2">
-              <Button 
-                variant="default"
-                size="lg"
-                className={theme === "cyber" ? "cyber-mono uppercase cyber-glow" : ""}
-              >
-                {theme === "cyber" ? <Brain className="w-4 h-4 mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
-                {theme === "cyber" ? "GENERATE COVER" : "Generate Cover Letter"}
-              </Button>
+              <Link to={`/jobs/${job.id}/cover-letter`}>
+                <Button 
+                  variant="default"
+                  size="lg"
+                  className={theme === "cyber" ? "cyber-mono uppercase cyber-glow w-full" : "w-full"}
+                >
+                  {theme === "cyber" ? <Brain className="w-4 h-4 mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
+                  {theme === "cyber" ? "GENERATE COVER" : "Generate Cover Letter"}
+                </Button>
+              </Link>
               <Button variant="outline" size="sm" className={theme === "cyber" ? "cyber-mono uppercase" : ""}>
                 <ExternalLink className="w-4 h-4 mr-2" />
                 {theme === "cyber" ? "SOURCE_LINK" : "Job Post Link"}
