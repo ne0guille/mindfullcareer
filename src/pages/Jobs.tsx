@@ -9,6 +9,12 @@ import ThemedFooter from "@/components/ThemedFooter";
 import { Button } from "@/components/ui/button";
 import { mockJobs } from "@/data/mockData";
 
+// Newspaper components
+import BreakingNewsTicker from "@/components/newspaper/BreakingNewsTicker";
+import ClassifiedAd from "@/components/newspaper/ClassifiedAd";
+import EditionInfo from "@/components/newspaper/EditionInfo";
+import AdvertisementBox from "@/components/newspaper/AdvertisementBox";
+
 const Jobs = () => {
   const { theme } = useTheme();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -18,6 +24,189 @@ const Jobs = () => {
     ? mockJobs.filter(job => job.hasCoverLetter)
     : mockJobs;
 
+  // Newspaper-specific layout
+  if (theme === "newspaper") {
+    return (
+      <ThemedLayout>
+        <BreakingNewsTicker />
+        
+        <main className="container max-w-6xl mx-auto px-4 py-8">
+          {/* Masthead for classifieds section */}
+          <header className="text-center mb-8 pb-6 border-b-4 border-double border-headline">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px flex-1 bg-rule-dark" />
+              <span className="stamp">Section B</span>
+              <div className="h-px flex-1 bg-rule-dark" />
+            </div>
+            <h1 className="font-display text-5xl md:text-6xl font-black tracking-tight text-headline uppercase">
+              Employment Classifieds
+            </h1>
+            <p className="font-serif italic text-lg text-subheadline mt-2">
+              "{mockJobs.length} Distinguished Positions Available This Edition"
+            </p>
+            <div className="flex justify-center gap-8 mt-4 text-xs font-typewriter uppercase tracking-widest text-ink-faded">
+              <span>• Full-Time •</span>
+              <span>• Remote •</span>
+              <span>• On-Site •</span>
+            </div>
+          </header>
+          
+          {/* 3-column newspaper layout */}
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left sidebar */}
+            <aside className="col-span-12 md:col-span-3 space-y-4">
+              <EditionInfo />
+              
+              {/* Filter box */}
+              <div className="border border-rule-dark p-3 bg-card">
+                <h4 className="font-display font-bold text-sm uppercase tracking-wider text-center border-b border-rule-dark pb-2 mb-3">
+                  Refine Search
+                </h4>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => setFilterCoverLetter(!filterCoverLetter)}
+                    className={`w-full flex items-center gap-2 px-2 py-1.5 border text-xs transition-all font-typewriter ${
+                      filterCoverLetter 
+                        ? "bg-stamp-red text-card border-stamp-red" 
+                        : "border-rule-light hover:border-headline bg-paper-aged"
+                    }`}
+                  >
+                    <Filter className="w-3 h-3" />
+                    Has Cover Letter ({mockJobs.filter(j => j.hasCoverLetter).length})
+                  </button>
+                </div>
+              </div>
+              
+              <AdvertisementBox 
+                title="Resume Analysis"
+                description="Have your CV reviewed by experts!"
+                link="/"
+                linkText="Submit Today"
+                variant="vintage"
+              />
+            </aside>
+            
+            {/* Main content - classified ads */}
+            <div className="col-span-12 md:col-span-6">
+              {/* Featured position */}
+              {filteredJobs.length > 0 && (
+                <div className="mb-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="text-2xl">★</span>
+                    <h2 className="font-display text-xl font-black uppercase tracking-wider">
+                      Featured Position
+                    </h2>
+                    <span className="text-2xl">★</span>
+                  </div>
+                  <ClassifiedAd job={filteredJobs[0]} featured />
+                </div>
+              )}
+              
+              {/* All positions in 2-column layout */}
+              <div className="border-t-4 border-double border-headline pt-6">
+                <h2 className="font-display text-xl font-black uppercase tracking-wider text-center mb-6">
+                  All Available Positions
+                </h2>
+                
+                <div className="newspaper-columns-2 space-y-4">
+                  {filteredJobs.slice(1).map((job) => (
+                    <div key={job.id} className="avoid-break mb-4">
+                      <ClassifiedAd job={job} size="small" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {filteredJobs.length === 0 && (
+                <div className="text-center py-16 border-4 border-double border-headline">
+                  <h3 className="font-display text-2xl font-black text-headline mb-2">
+                    No Listings Found
+                  </h3>
+                  <p className="font-serif italic text-ink-faded">
+                    Check back in tomorrow's edition for new opportunities
+                  </p>
+                </div>
+              )}
+            </div>
+            
+            {/* Right sidebar - more ads */}
+            <aside className="col-span-12 md:col-span-3 space-y-4">
+              <AdvertisementBox 
+                title="Company Intel"
+                description="Know your employer before the interview!"
+                link="/company/felix-pago"
+                linkText="Investigate"
+                variant="bold"
+              />
+              
+              {/* Stats box */}
+              <div className="border-4 border-double border-headline p-4 bg-card">
+                <h4 className="font-display font-bold text-center uppercase tracking-wider mb-4">
+                  Market Statistics
+                </h4>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between border-b border-dashed border-rule-light pb-2">
+                    <span className="font-typewriter text-xs uppercase text-ink-faded">Positions</span>
+                    <span className="font-display font-black text-headline">{mockJobs.length}</span>
+                  </div>
+                  <div className="flex justify-between border-b border-dashed border-rule-light pb-2">
+                    <span className="font-typewriter text-xs uppercase text-ink-faded">Remote</span>
+                    <span className="font-display font-black text-headline">{mockJobs.filter(j => j.location.includes("Remote")).length}</span>
+                  </div>
+                  <div className="flex justify-between border-b border-dashed border-rule-light pb-2">
+                    <span className="font-typewriter text-xs uppercase text-ink-faded">With Cover</span>
+                    <span className="font-display font-black text-headline">{mockJobs.filter(j => j.hasCoverLetter).length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-typewriter text-xs uppercase text-ink-faded">Avg Match</span>
+                    <span className="font-display font-black text-stamp-red">
+                      {Math.round(mockJobs.reduce((a, b) => a + b.matchPercentage, 0) / mockJobs.length)}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Tips box */}
+              <div className="border border-rule-dark p-4 bg-paper-aged">
+                <h4 className="font-display font-bold text-center uppercase tracking-wider border-b border-rule-dark pb-2 mb-3">
+                  Job Seeker Tips
+                </h4>
+                <ul className="space-y-2 text-xs font-serif">
+                  <li className="flex items-start gap-2">
+                    <span className="text-stamp-red font-bold">I.</span>
+                    <span>Always tailor your cover letter to the position</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-stamp-red font-bold">II.</span>
+                    <span>Research the company thoroughly before applying</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-stamp-red font-bold">III.</span>
+                    <span>Follow up within one week of application</span>
+                  </li>
+                </ul>
+              </div>
+            </aside>
+          </div>
+          
+          {/* Footer decoration */}
+          <div className="mt-12 text-center">
+            <div className="newspaper-rule-ornate mb-4" />
+            <p className="font-typewriter text-xs text-ink-faded uppercase tracking-[0.3em]">
+              — End of Classifieds Section —
+            </p>
+            <p className="font-serif italic text-sm text-ink-faded mt-2">
+              "New opportunities published daily. Subscribe for instant notifications."
+            </p>
+          </div>
+        </main>
+        
+        <ThemedFooter />
+      </ThemedLayout>
+    );
+  }
+
+  // Default layout for other themes
   return (
     <ThemedLayout>
       <main className="container max-w-6xl mx-auto px-4 py-8">
@@ -26,7 +215,6 @@ const Jobs = () => {
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                {theme === "newspaper" && <span className="stamp">Classifieds</span>}
                 {theme === "zen" && (
                   <span className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full text-primary text-sm">
                     Opportunities await
@@ -39,12 +227,12 @@ const Jobs = () => {
                 )}
               </div>
               <h1 className={`mb-2 ${theme === "cyber" ? "text-4xl font-bold text-primary cyber-text-glow cyber-mono uppercase" : "headline-primary"}`}>
-                {theme === "newspaper" ? "Employment Opportunities" : theme === "zen" ? "Career Opportunities" : "JOB_LISTINGS"}
+                {theme === "zen" ? "Career Opportunities" : "JOB_LISTINGS"}
               </h1>
               <p className={`${theme === "cyber" ? "text-muted-foreground cyber-mono" : "text-muted-foreground italic"}`}>
                 {theme === "cyber" 
                   ? `> ${mockJobs.length} records found in database`
-                  : `${mockJobs.length} positions await in today's edition`
+                  : `${mockJobs.length} positions available`
                 }
               </p>
             </div>
@@ -54,9 +242,7 @@ const Jobs = () => {
                 onClick={() => setViewMode("grid")}
                 className={`p-2 border transition-all ${
                   viewMode === "grid" 
-                    ? theme === "cyber" 
-                      ? "bg-primary text-primary-foreground border-primary" 
-                      : "bg-primary text-primary-foreground border-primary"
+                    ? "bg-primary text-primary-foreground border-primary" 
                     : "border-border hover:border-primary"
                 }`}
               >
@@ -66,9 +252,7 @@ const Jobs = () => {
                 onClick={() => setViewMode("list")}
                 className={`p-2 border transition-all ${
                   viewMode === "list" 
-                    ? theme === "cyber" 
-                      ? "bg-primary text-primary-foreground border-primary" 
-                      : "bg-primary text-primary-foreground border-primary"
+                    ? "bg-primary text-primary-foreground border-primary" 
                     : "border-border hover:border-primary"
                 }`}
               >
@@ -81,7 +265,6 @@ const Jobs = () => {
             </div>
           </div>
           
-          {theme === "newspaper" && <div className="newspaper-rule-double mt-6" />}
           {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mt-6" />}
         </div>
         
@@ -127,7 +310,7 @@ const Jobs = () => {
                       {theme === "cyber" ? `EXP: ${job.expiresIn}` : `Expires in ${job.expiresIn}`}
                     </ThemedBadge>
                     {job.hasCoverLetter && (
-                      <FileText className={`w-4 h-4 ${theme === "cyber" ? "text-primary" : "text-primary"}`} />
+                      <FileText className="w-4 h-4 text-primary" />
                     )}
                   </div>
                   
@@ -141,9 +324,7 @@ const Jobs = () => {
                     <div className={`w-8 h-8 flex items-center justify-center font-bold text-sm ${
                       theme === "cyber" 
                         ? "bg-primary/20 border border-primary/50 text-primary" 
-                        : theme === "zen"
-                          ? "bg-primary/10 rounded-full text-primary"
-                          : "bg-primary text-primary-foreground"
+                        : "bg-primary/10 rounded-full text-primary"
                     }`}>
                       {job.companyInitial}
                     </div>
@@ -217,7 +398,7 @@ const Jobs = () => {
                   
                   {/* Action button */}
                   <Button 
-                    variant={theme === "cyber" ? "default" : "default"} 
+                    variant="default"
                     size="sm" 
                     className={`w-full mt-4 ${theme === "cyber" ? "cyber-mono uppercase" : ""}`}
                   >
@@ -242,10 +423,9 @@ const Jobs = () => {
         
         {/* Footer decoration */}
         <div className="mt-12 text-center">
-          {theme === "newspaper" && <div className="newspaper-rule-ornate mb-4" />}
           {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-4" />}
           <p className={`text-xs ${theme === "cyber" ? "cyber-mono text-primary uppercase" : "text-muted-foreground uppercase tracking-widest"}`}>
-            {theme === "cyber" ? "— END_OF_QUERY —" : "— End of Classifieds Section —"}
+            {theme === "cyber" ? "— END_OF_QUERY —" : "— End of Listings —"}
           </p>
         </div>
       </main>
