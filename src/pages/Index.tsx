@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "@/contexts/ThemeContext";
 import ThemedLayout from "@/components/ThemedLayout";
@@ -22,8 +23,15 @@ import PullQuote from "@/components/newspaper/PullQuote";
 import AdvertisementBox from "@/components/newspaper/AdvertisementBox";
 import ContinuedMarker from "@/components/newspaper/ContinuedMarker";
 
+// Zen theme designs
+import ZenHomeDesign1 from "@/components/zen/ZenHomeDesign1";
+import ZenHomeDesign2 from "@/components/zen/ZenHomeDesign2";
+import ZenHomeDesign3 from "@/components/zen/ZenHomeDesign3";
+import ZenDesignSwitcher from "@/components/zen/ZenDesignSwitcher";
+
 const Index = () => {
   const { theme } = useTheme();
+  const [zenDesign, setZenDesign] = useState<1 | 2 | 3>(1);
 
   const features = {
     newspaper: [
@@ -246,7 +254,21 @@ const Index = () => {
     );
   }
 
-  // Default layout for other themes (zen, cyber)
+  // Zen theme - show design variants
+  if (theme === "zen") {
+    return (
+      <ThemedLayout>
+        <ThemedMasthead />
+        {zenDesign === 1 && <ZenHomeDesign1 />}
+        {zenDesign === 2 && <ZenHomeDesign2 />}
+        {zenDesign === 3 && <ZenHomeDesign3 />}
+        <ZenDesignSwitcher currentDesign={zenDesign} onDesignChange={setZenDesign} />
+        <ThemedFooter />
+      </ThemedLayout>
+    );
+  }
+
+  // Cyber theme layout
   return (
     <ThemedLayout>
       {/* Masthead */}
@@ -255,31 +277,22 @@ const Index = () => {
       {/* Hero Section */}
       <section className="container max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          {theme === "zen" && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm mb-4">
-              <Heart className="w-4 h-4" />
-              Begin your peaceful journey
-            </div>
-          )}
-          {theme === "cyber" && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/30 text-primary text-sm mb-4 cyber-mono">
-              <Zap className="w-4 h-4" />
-              INITIALIZING CAREER PROTOCOL...
-            </div>
-          )}
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/30 text-primary text-sm mb-4 cyber-mono">
+            <Zap className="w-4 h-4" />
+            INITIALIZING CAREER PROTOCOL...
+          </div>
           
-          <h2 className={`headline-primary mb-4 ${theme === "cyber" ? "cyber-text-glow" : ""}`}>
-            {theme === "zen" ? "Find Your Perfect Path" : "OPTIMIZE YOUR CAREER"}
+          <h2 className="headline-primary mb-4 cyber-text-glow">
+            OPTIMIZE YOUR CAREER
           </h2>
           
-          <p className={`text-xl max-w-2xl mx-auto ${theme === "cyber" ? "text-muted-foreground cyber-mono" : "text-muted-foreground"}`}>
-            {theme === "zen" && "Take a breath. Let go of stress. We are here to guide you gently toward opportunities that resonate with your spirit."}
-            {theme === "cyber" && "> Deploying advanced neural networks to maximize your career potential. Stand by for optimization."}
+          <p className="text-xl max-w-2xl mx-auto text-muted-foreground cyber-mono">
+            {"> Deploying advanced neural networks to maximize your career potential. Stand by for optimization."}
           </p>
         </div>
 
         {/* Feature columns */}
-        {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-8" />}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-8" />
         
         <div className="grid md:grid-cols-3 gap-6">
           {currentFeatures.map((feature, index) => (
@@ -289,17 +302,17 @@ const Index = () => {
               style={{ animationDelay: `${index * 100}ms` } as React.CSSProperties}
             >
               <div className="flex items-start gap-3 mb-4">
-                <span className={`text-3xl font-bold ${theme === "cyber" ? "text-primary cyber-text-glow cyber-mono" : "text-primary"}`}>
+                <span className="text-3xl font-bold text-primary cyber-text-glow cyber-mono">
                   {feature.number}
                 </span>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <feature.icon className={`w-5 h-5 ${theme === "cyber" ? "text-primary" : "text-primary"}`} />
-                    <h3 className={`font-semibold ${theme === "cyber" ? "cyber-mono uppercase text-primary" : ""}`}>
+                    <feature.icon className="w-5 h-5 text-primary" />
+                    <h3 className="font-semibold cyber-mono uppercase text-primary">
                       {feature.title}
                     </h3>
                   </div>
-                  <p className={`text-sm ${theme === "cyber" ? "text-muted-foreground cyber-mono" : "text-muted-foreground"}`}>
+                  <p className="text-sm text-muted-foreground cyber-mono">
                     {feature.description}
                   </p>
                 </div>
@@ -311,9 +324,9 @@ const Index = () => {
 
       {/* Main Action Cards */}
       <ThemedSection 
-        title={theme === "cyber" ? "TOOLKIT.exe" : "Your Tools"} 
-        subtitle={theme === "cyber" ? "Select module to initialize" : "Choose your next step with intention"}
-        badge={theme === "cyber" ? "MODULES" : "Ready"}
+        title="TOOLKIT.exe"
+        subtitle="Select module to initialize"
+        badge="MODULES"
       >
         <div className="container max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6">
@@ -332,18 +345,18 @@ const Index = () => {
 
       {/* Recent Jobs Preview */}
       <section className="container max-w-6xl mx-auto px-4 py-12">
-        {theme === "cyber" && <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-8" />}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-8" />
         
         <div className="flex items-center justify-between mb-6">
           <div>
-            {theme === "cyber" && <span className="cyber-mono text-xs text-primary uppercase">[RECENT_JOBS]</span>}
-            <h2 className={`mt-2 ${theme === "cyber" ? "text-2xl font-bold text-primary cyber-text-glow cyber-mono uppercase" : "headline-secondary"}`}>
-              {theme === "zen" ? "Recent Opportunities" : "JOB_LISTINGS.db"}
+            <span className="cyber-mono text-xs text-primary uppercase">[RECENT_JOBS]</span>
+            <h2 className="mt-2 text-2xl font-bold text-primary cyber-text-glow cyber-mono uppercase">
+              JOB_LISTINGS.db
             </h2>
           </div>
           <Link to="/jobs">
-            <Button variant={theme === "cyber" ? "default" : "outline"} className={theme === "cyber" ? "cyber-mono uppercase" : ""}>
-              {theme === "cyber" ? "ACCESS ALL" : "View All"}
+            <Button variant="default" className="cyber-mono uppercase">
+              ACCESS ALL
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
@@ -354,21 +367,17 @@ const Index = () => {
             <Link key={job.id} to={`/jobs/${job.id}`} className="group">
               <ThemedCard className="hover:scale-[1.02] transition-transform">
                 <div className="flex items-start gap-3">
-                  <div className={`w-10 h-10 flex items-center justify-center font-bold text-sm flex-shrink-0 ${
-                    theme === "cyber" 
-                      ? "bg-primary/20 border border-primary/50 text-primary" 
-                      : "bg-primary/10 rounded-full text-primary"
-                  }`}>
+                  <div className="w-10 h-10 flex items-center justify-center font-bold text-sm flex-shrink-0 bg-primary/20 border border-primary/50 text-primary">
                     {job.companyInitial}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className={`font-semibold truncate group-hover:text-primary transition-colors ${theme === "cyber" ? "cyber-mono uppercase text-sm" : ""}`}>
+                    <h3 className="font-semibold truncate group-hover:text-primary transition-colors cyber-mono uppercase text-sm">
                       {job.title}
                     </h3>
-                    <p className={`text-sm ${theme === "cyber" ? "text-primary cyber-mono" : "text-primary"}`}>{job.company}</p>
+                    <p className="text-sm text-primary cyber-mono">{job.company}</p>
                     <p className="text-xs text-muted-foreground mt-1">{job.location} • {job.type}</p>
                   </div>
-                  <span className={`text-lg font-bold ${theme === "cyber" ? "text-primary cyber-text-glow cyber-mono" : "text-primary"}`}>
+                  <span className="text-lg font-bold text-primary cyber-text-glow cyber-mono">
                     {job.matchPercentage}%
                   </span>
                 </div>
