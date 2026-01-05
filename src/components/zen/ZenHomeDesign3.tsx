@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { 
-  Compass, FileUp, Chrome, 
+  Compass, FileUp, Chrome, ClipboardPaste,
   ChevronRight, Star, Heart, Sparkles,
-  FileText, Target, Building2, Wind, Leaf
+  FileText, Target, Building2, Wind, Leaf, ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockJobs } from "@/data/mockData";
@@ -169,7 +169,7 @@ const ZenHomeDesign3 = () => {
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* Two Ways to Add Jobs - from Tranquil Stream */}
       <section className="py-24 bg-gradient-to-b from-background to-primary/5">
         <div className="container max-w-6xl mx-auto px-4">
           <motion.div
@@ -178,172 +178,199 @@ const ZenHomeDesign3 = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-sm text-primary uppercase tracking-widest mb-4 block">Your Journey</span>
-            <h2 className="text-4xl md:text-5xl font-light text-foreground mb-4">
-              Simple steps, no pressure
+            <h2 className="text-4xl md:text-5xl font-extralight text-foreground mb-4">
+              Two gentle ways to add jobs
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Move at your own pace. There's no timer, no competition—just you and your path.
+            <p className="text-muted-foreground max-w-lg mx-auto">
+              No pressure. Choose what feels natural to you.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 gap-8">
             {[
               { 
-                icon: FileUp, 
-                title: "Share Your Story",
-                desc: "Upload your CV—every experience you have is valuable",
-                step: "1",
-                affirmation: "You've accomplished so much"
-              },
-              { 
                 icon: Chrome, 
-                title: "Curate With Care",
-                desc: "Save jobs that genuinely resonate with you",
-                step: "2",
-                affirmation: "Trust your instincts"
+                title: "Chrome Extension", 
+                desc: "Browse LinkedIn at your own pace. When something sparks interest, save it with one click. No rushing, no FOMO.", 
+                tag: "Effortless",
+                motivation: "Stay in your flow state"
               },
               { 
-                icon: Target, 
-                title: "Understand Gently",
-                desc: "See alignment insights, not harsh judgments",
-                step: "3",
-                affirmation: "Gaps are just growth areas"
+                icon: ClipboardPaste, 
+                title: "Paste & Analyze", 
+                desc: "Found a job anywhere? Paste the description and let us gently extract insights. Simple, calm, effective.", 
+                tag: "Flexible",
+                motivation: "Every path is valid"
               },
-              { 
-                icon: Heart, 
-                title: "Move Forward",
-                desc: "Prepare with confidence and self-compassion",
-                step: "4",
-                affirmation: "You belong in the right place"
-              }
-            ].map((card, i) => (
+            ].map((item, i) => (
               <motion.div
-                key={card.title}
+                key={item.title}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
+                transition={{ delay: i * 0.2, duration: 0.8 }}
+                className="relative group"
               >
-                <motion.div
-                  whileHover={{ y: -8 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="relative h-full p-6 rounded-3xl bg-card/60 border border-primary/10 text-center"
-                >
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
-                    {card.step}
+                <div className="h-full p-10 bg-card/40 backdrop-blur-sm border border-primary/10 rounded-3xl transition-all duration-500 group-hover:bg-card/80 group-hover:border-primary/30">
+                  <span className="text-xs text-primary uppercase tracking-widest">{item.tag}</span>
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center my-6">
+                    <item.icon className="w-8 h-8 text-primary" />
                   </div>
-                  
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mt-4 mb-4">
-                    <card.icon className="w-7 h-7 text-primary" />
-                  </div>
-                  
-                  <h3 className="text-lg font-medium text-foreground mb-2">{card.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-3">{card.desc}</p>
-                  <p className="text-xs text-primary italic">✧ {card.affirmation}</p>
-                </motion.div>
+                  <h3 className="text-2xl font-light text-foreground mb-4">{item.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">{item.desc}</p>
+                  <p className="text-sm text-primary italic">✧ {item.motivation}</p>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Cards */}
+      {/* Your Gentle Journey - Floating Cards from Design 1 */}
       <section className="py-24">
         <div className="container max-w-6xl mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
-            <span className="text-sm text-primary uppercase tracking-widest mb-4 block">Mindful Tools</span>
-            <h2 className="text-4xl md:text-5xl font-light text-foreground mb-4">
-              Designed to reduce anxiety
+            <h2 className="text-3xl font-light text-foreground mb-4">Your gentle journey</h2>
+            <p className="text-muted-foreground">Three simple steps, no pressure, no judgment</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="grid md:grid-cols-3 gap-8"
+          >
+            {[
+              { 
+                step: "1", 
+                icon: FileUp, 
+                title: "Share Your Story", 
+                desc: "Your experience is valuable. Upload your CV and let us celebrate your unique journey.",
+                affirmation: "Every skill you have was earned",
+                color: "from-rose-400/20 to-pink-400/20"
+              },
+              { 
+                step: "2", 
+                icon: Target, 
+                title: "Understand Your Fit", 
+                desc: "See alignment gently, not as judgment. Gaps are just opportunities to grow.",
+                affirmation: "You are more than a match percentage",
+                color: "from-emerald-400/20 to-teal-400/20"
+              },
+              { 
+                step: "3", 
+                icon: Heart, 
+                title: "Move Forward With Confidence", 
+                desc: "Create cover letters and prepare for interviews feeling calm and ready.",
+                affirmation: "You belong in spaces that value you",
+                color: "from-amber-400/20 to-orange-400/20"
+              },
+            ].map((feature, i) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2, duration: 0.6 }}
+                whileHover={{ y: -8 }}
+                className="zen-float"
+                style={{ animationDelay: `${i * 0.5}s` }}
+              >
+                <div className={`relative p-8 rounded-3xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-white/50`}>
+                  <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
+                    {feature.step}
+                  </div>
+                  <div className="w-16 h-16 rounded-2xl bg-white/80 flex items-center justify-center mb-6 shadow-sm">
+                    <feature.icon className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">{feature.desc}</p>
+                  <p className="text-sm text-primary italic">✧ {feature.affirmation}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Mindful Tools */}
+      <section className="py-16 bg-gradient-to-b from-transparent to-primary/5">
+        <div className="container max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 text-primary mb-4">
+              <Sparkles className="w-5 h-5" />
+              <span className="text-sm font-medium uppercase tracking-wider">Mindful Tools</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-light text-foreground mb-4">
+              Everything to support you, nothing to overwhelm
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Every feature is built with your emotional wellbeing in mind
+              Each tool is designed with your peace of mind first
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             {[
-              { 
-                icon: Target, 
+              {
+                icon: FileText,
+                title: "Thoughtful Cover Letters",
+                desc: "Generate letters that sound like you—authentic and confident",
+                motivation: "Your voice matters",
+                link: "/jobs"
+              },
+              {
+                icon: Building2,
+                title: "Company Research",
+                desc: "Enter interviews feeling informed, prepared, and calm",
+                motivation: "Knowledge brings peace",
+                link: "/company/felix-pago"
+              },
+              {
+                icon: Target,
                 title: "Gentle Compatibility",
-                desc: "See skill alignment presented with compassion, not as pass/fail",
-                color: "from-emerald-500/20 to-teal-500/20",
-                link: "/jobs",
-                features: ["Encouraging insights", "Growth opportunities", "No harsh judgments"],
-                motivation: "You are more than a percentage"
+                desc: "Understand your fit without harsh judgment or anxiety",
+                motivation: "Gaps are growth areas, not failures",
+                link: "/jobs"
               },
-              { 
-                icon: FileText, 
-                title: "Authentic Letters",
-                desc: "Generate cover letters that sound like you—warm and genuine",
-                color: "from-rose-500/20 to-pink-500/20",
-                link: "/jobs",
-                features: ["Your unique voice", "Confident tone", "Easy customization"],
-                motivation: "Your story matters"
-              },
-              { 
-                icon: Building2, 
-                title: "Calm Preparation",
-                desc: "Research companies so you walk into interviews feeling at ease",
-                color: "from-violet-500/20 to-purple-500/20",
-                link: "/company/felix-pago",
-                features: ["Culture insights", "Interview readiness", "Peace of mind"],
-                motivation: "Knowledge brings confidence"
+              {
+                icon: Chrome,
+                title: "Effortless Saving",
+                desc: "Save jobs from LinkedIn or paste descriptions—simple and quick",
+                motivation: "Stay focused on what matters",
+                link: "/jobs"
               }
-            ].map((card, i) => (
+            ].map((feature, i) => (
               <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                key={feature.title}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.6 }}
+                transition={{ delay: i * 0.1 }}
               >
-                <Link to={card.link}>
-                  <motion.div
-                    whileHover={{ y: -12, scale: 1.02 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className={`group relative h-full p-8 rounded-3xl bg-gradient-to-br ${card.color} border border-white/50 cursor-pointer overflow-hidden`}
-                  >
-                    {/* Hover glow effect */}
-                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/30 transition-all duration-500 rounded-3xl" />
-                    
-                    <div className="relative z-10">
-                      <div className="w-16 h-16 rounded-2xl bg-white/80 flex items-center justify-center mb-6 shadow-sm group-hover:shadow-md transition-shadow">
-                        <card.icon className="w-8 h-8 text-primary" />
+                <Link to={feature.link}>
+                  <MindfulCard glowOnHover className="hover:scale-[1.02] transition-transform duration-300">
+                    <div className="flex items-start gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <feature.icon className="w-7 h-7 text-primary" />
                       </div>
-                      
-                      <h3 className="text-2xl font-medium text-foreground mb-3">{card.title}</h3>
-                      <p className="text-muted-foreground mb-4">{card.desc}</p>
-                      
-                      <ul className="space-y-2 mb-4">
-                        {card.features.map((feature, fi) => (
-                          <motion.li
-                            key={feature}
-                            initial={{ opacity: 0, x: -10 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.15 + fi * 0.1 }}
-                            className="flex items-center gap-2 text-sm text-foreground/70"
-                          >
-                            <Star className="w-3 h-3 text-primary" />
-                            {feature}
-                          </motion.li>
-                        ))}
-                      </ul>
-
-                      <p className="text-sm text-primary italic mb-4">✧ {card.motivation}</p>
-
-                      <div className="flex items-center text-primary font-medium">
-                        <span>Explore</span>
-                        <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-transform" />
+                      <div className="flex-1">
+                        <h3 className="font-medium text-foreground mb-1">{feature.title}</h3>
+                        <p className="text-sm text-muted-foreground mb-2">{feature.desc}</p>
+                        <p className="text-xs text-primary italic">✧ {feature.motivation}</p>
                       </div>
+                      <ArrowRight className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-1" />
                     </div>
-                  </motion.div>
+                  </MindfulCard>
                 </Link>
               </motion.div>
             ))}
