@@ -34,11 +34,11 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     localStorage.setItem("career-theme", theme);
-    
+
     // Remove all theme classes
     document.documentElement.classList.remove("theme-newspaper", "theme-zen", "theme-cyber");
     // Add current theme class
-    document.documentElement.classList.add(`theme-${theme}`);
+    document.documentElement.classList.add(`theme-zen`);
   }, [theme]);
 
   return (
