@@ -1,511 +1,545 @@
-import { useState, Fragment } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Grid3X3,
-  List,
   MapPin,
   Clock,
   FileText,
-  Heart,
   Bookmark,
-  Wind,
-  Sparkles,
-  Sun,
-  Leaf,
   Star,
-  Filter,
-  ArrowUp,
-  Home
+  X,
+  ExternalLink,
+  Sparkles,
+  ChevronRight,
+  Building2,
+  Calendar
 } from "lucide-react";
 import ThemedLayout from "@/components/ThemedLayout";
 import ThemedFooter from "@/components/ThemedFooter";
-import AffirmationBanner from "@/components/zen/AffirmationBanner";
-import MindfulCard from "@/components/zen/MindfulCard";
-import BreathingExercise from "@/components/motivation/BreathingExercise";
-import MotivationalMessage from "@/components/motivation/MotivationalMessage";
 import { Button } from "@/components/ui/button";
 import { mockJobs } from "@/data/mockData";
 
-// Mindful break messages
-const mindfulBreaks = [
-  {
-    icon: Wind,
-    message: "Remember to breathe. You're doing great.",
-    submessage: "Take a moment before continuing."
-  },
-  {
-    icon: Heart,
-    message: "Each application is a step forward.",
-    submessage: "Progress isn't always linear."
-  },
-  {
-    icon: Sparkles,
-    message: "Your next chapter is being written.",
-    submessage: "Trust the journey."
-  },
-  {
-    icon: Sun,
-    message: "Rest when you need to. This will still be here.",
-    submessage: "Self-care is part of the process."
-  }
-];
-
-// Get contextual message based on job count
-const getContextualMessage = (count: number) => {
-  if (count === 0) return {
-    message: "Your perfect opportunity is out there",
-    submessage: "When you find it, save it here"
-  };
-  if (count <= 5) return {
-    message: "You're curating thoughtfully",
-    submessage: "Quality over quantity"
-  };
-  if (count <= 15) return {
-    message: "A wonderful collection of possibilities awaits",
-    submessage: "Take your time with each one"
-  };
-  return {
-    message: "So many paths forward",
-    submessage: "Remember: you only need one to say yes"
-  };
+// Determine card size based on match percentage
+const getCardSize = (matchPercentage: number, index: number): "large" | "medium" | "small" => {
+  if (matchPercentage >= 85) return "large";
+  if (matchPercentage >= 70) return "medium";
+  // Vary small cards for visual interest
+  return index % 3 === 0 ? "medium" : "small";
 };
 
-// Parse savedAt for sorting (e.g., "1 day ago" -> 1, "2 days ago" -> 2)
-const parseSavedAt = (savedAt: string): number => {
-  const match = savedAt.match(/(\d+)/);
-  return match ? parseInt(match[1]) : 999;
-};
-
-// Parse expiresIn for sorting
-const parseExpiresIn = (expiresIn: string): number => {
-  const match = expiresIn.match(/(\d+)/);
-  return match ? parseInt(match[1]) : 999;
-};
-
-// Mindful Break Component
-const MindfulBreak = ({ index }: { index: number }) => {
-  const breakData = mindfulBreaks[index % mindfulBreaks.length];
-  const Icon = breakData.icon;
+// Bento Card Component
+const BentoJobCard = ({ 
+  job, 
+  index, 
+  isSelected, 
+  onSelect 
+}: { 
+  job: typeof mockJobs[0]; 
+  index: number;
+  isSelected: boolean;
+  onSelect: (id: string | null) => void;
+}) => {
+  const size = getCardSize(job.matchPercentage, index);
+  
+  const sizeClasses = {
+    large: "md:col-span-2 md:row-span-2",
+    medium: "md:col-span-1 md:row-span-2",
+    small: "md:col-span-1 md:row-span-1"
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="col-span-full py-8"
+      layoutId={`card-${job.id}`}
+      onClick={() => onSelect(job.id)}
+      className={`
+        ${sizeClasses[size]}
+        cursor-pointer group relative
+      `}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ 
+        delay: index * 0.05, 
+        duration: 0.4,
+        layout: { type: "spring", stiffness: 300, damping: 30 }
+      }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
-      <div className="max-w-md mx-auto text-center p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent border border-primary/10">
-        <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center zen-breathing">
-          <Icon className="w-6 h-6 text-primary" />
+      <div className={`
+        h-full min-h-[180px] p-6 rounded-3xl
+        bg-gradient-to-br from-card/90 to-card/60
+        backdrop-blur-sm border border-primary/10
+        transition-all duration-500
+        hover:border-primary/30 hover:shadow-[0_8px_40px_-12px_hsl(var(--primary)/0.3)]
+        ${size === "large" ? "min-h-[320px]" : size === "medium" ? "min-h-[280px]" : "min-h-[180px]"}
+      `}>
+        
+        {/* Match indicator - floating badge */}
+        <motion.div 
+          className="absolute -top-2 -right-2 z-10"
+          initial={{ scale: 0, rotate: -20 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: index * 0.05 + 0.2, type: "spring" }}
+        >
+          <div className={`
+            px-3 py-1.5 rounded-full text-xs font-medium
+            ${job.matchPercentage >= 85 
+              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
+              : job.matchPercentage >= 70
+                ? "bg-primary/20 text-primary border border-primary/30"
+                : "bg-muted text-muted-foreground"
+            }
+          `}>
+            {job.matchPercentage}% match
+          </div>
+        </motion.div>
+
+        {/* Content */}
+        <div className="h-full flex flex-col">
+          
+          {/* Company Logo Area */}
+          <div className="flex items-start gap-3 mb-4">
+            <div className={`
+              rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 
+              flex items-center justify-center font-semibold text-primary
+              ${size === "large" ? "w-14 h-14 text-xl" : "w-10 h-10 text-sm"}
+            `}>
+              {job.companyInitial}
+            </div>
+            
+            {job.hasCoverLetter && (
+              <motion.div 
+                className="ml-auto flex items-center gap-1 px-2 py-1 rounded-full bg-green-500/10 text-green-600 text-xs"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 + 0.3 }}
+              >
+                <FileText className="w-3 h-3" />
+                Ready
+              </motion.div>
+            )}
+          </div>
+
+          {/* Job Title - Primary Focus */}
+          <motion.h3 
+            className={`
+              font-medium text-foreground mb-2 line-clamp-2
+              group-hover:text-primary transition-colors duration-300
+              ${size === "large" ? "text-2xl" : size === "medium" ? "text-xl" : "text-lg"}
+            `}
+            layoutId={`title-${job.id}`}
+          >
+            {job.title}
+          </motion.h3>
+
+          {/* Company Name */}
+          <motion.p 
+            className="text-muted-foreground font-medium mb-1"
+            layoutId={`company-${job.id}`}
+          >
+            {job.company}
+          </motion.p>
+
+          {/* Location */}
+          <motion.p 
+            className="text-sm text-muted-foreground/80 flex items-center gap-1.5 mb-4"
+            layoutId={`location-${job.id}`}
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            {job.location}
+          </motion.p>
+
+          {/* Spacer */}
+          <div className="flex-1" />
+
+          {/* Bottom info - only on larger cards */}
+          {size !== "small" && (
+            <motion.div 
+              className="flex flex-wrap gap-1.5 mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: index * 0.05 + 0.4 }}
+            >
+              {job.skills.slice(0, size === "large" ? 4 : 2).map((skill) => (
+                <span
+                  key={skill}
+                  className="px-2.5 py-1 text-xs bg-muted/50 rounded-full text-muted-foreground"
+                >
+                  {skill}
+                </span>
+              ))}
+              {job.skills.length > (size === "large" ? 4 : 2) && (
+                <span className="px-2 py-1 text-xs text-muted-foreground/60">
+                  +{job.skills.length - (size === "large" ? 4 : 2)}
+                </span>
+              )}
+            </motion.div>
+          )}
+
+          {/* Footer */}
+          <div className="flex items-center justify-between text-xs text-muted-foreground/70">
+            <span className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              {job.expiresIn}
+            </span>
+            <span className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+              View details
+              <ChevronRight className="w-3 h-3" />
+            </span>
+          </div>
         </div>
-        <p className="text-lg font-light text-foreground mb-1">
-          {breakData.message}
-        </p>
-        <p className="text-sm text-muted-foreground italic">
-          {breakData.submessage}
-        </p>
+
+        {/* Hover glow effect */}
+        <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
       </div>
     </motion.div>
   );
 };
 
-// Enhanced Job Card Component
-const MindfulJobCard = ({ job, index }: { job: typeof mockJobs[0]; index: number }) => {
+// Expanded Card Modal
+const ExpandedCard = ({ 
+  job, 
+  onClose 
+}: { 
+  job: typeof mockJobs[0]; 
+  onClose: () => void;
+}) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08, duration: 0.5 }}
-      whileHover={{ y: -4 }}
-      className="group h-full"
-    >
-      <Link to={`/jobs/${job.id}`} className="block h-full">
-        <div className="h-full p-6 bg-card/80 backdrop-blur-sm rounded-3xl border border-primary/10 transition-all duration-500 hover:shadow-[0_0_40px_-10px_hsl(var(--primary)/0.25)] hover:border-primary/30">
+    <>
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-background/80 backdrop-blur-md z-50"
+      />
+      
+      {/* Expanded Card */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+        <motion.div
+          layoutId={`card-${job.id}`}
+          className="w-full max-w-2xl max-h-[85vh] overflow-auto pointer-events-auto"
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        >
+          <div className="p-8 rounded-3xl bg-card border border-primary/20 shadow-2xl shadow-primary/10">
+            
+            {/* Close button */}
+            <motion.button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 rounded-full bg-muted/80 hover:bg-muted transition-colors"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
 
-          {/* Top Row: Saved date + Cover letter indicator */}
-          <div className="flex items-center justify-between mb-4">
-            <span className="px-3 py-1 text-xs bg-primary/10 text-primary rounded-full">
-              Saved {job.savedAt}
-            </span>
-            {job.hasCoverLetter && (
-              <div className="flex items-center gap-1 text-xs text-primary">
-                <FileText className="w-3.5 h-3.5" />
-                <span>Letter ready</span>
-              </div>
-            )}
-          </div>
-
-          {/* Expiry notice - gentle */}
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-3">
-            <Clock className="w-3 h-3" />
-            <span>Expires in {job.expiresIn}</span>
-          </div>
-
-          {/* Job Title */}
-          <h3 className="text-xl font-medium text-foreground mb-3 group-hover:text-primary transition-colors">
-            {job.title}
-          </h3>
-
-          {/* Company Row */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <span className="font-semibold text-primary">
+            {/* Header */}
+            <div className="flex items-start gap-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center font-bold text-primary text-2xl">
                 {job.companyInitial}
-              </span>
-            </div>
-            <div>
-              <p className="font-medium text-foreground">{job.company}</p>
-              <p className="text-sm text-muted-foreground flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                {job.location}
-              </p>
-            </div>
-          </div>
+              </div>
+              
+              <div className="flex-1">
+                <motion.h2 
+                  className="text-2xl font-semibold text-foreground mb-1"
+                  layoutId={`title-${job.id}`}
+                >
+                  {job.title}
+                </motion.h2>
+                <motion.p 
+                  className="text-lg text-muted-foreground"
+                  layoutId={`company-${job.id}`}
+                >
+                  {job.company}
+                </motion.p>
+              </div>
 
-          {/* Skills Preview */}
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {job.skills.slice(0, 4).map((skill) => (
-              <span
-                key={skill}
-                className="px-2.5 py-1 text-xs bg-muted/50 rounded-full text-muted-foreground"
+              {/* Match Score */}
+              <div className="text-right">
+                <div className={`
+                  inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+                  ${job.matchPercentage >= 85 
+                    ? "bg-primary text-primary-foreground" 
+                    : job.matchPercentage >= 70
+                      ? "bg-primary/20 text-primary"
+                      : "bg-muted text-muted-foreground"
+                  }
+                `}>
+                  <Sparkles className="w-4 h-4" />
+                  {job.matchPercentage}% alignment
+                </div>
+              </div>
+            </div>
+
+            {/* Meta info row */}
+            <motion.div 
+              className="flex flex-wrap gap-4 mb-6 pb-6 border-b border-border/50"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+            >
+              <motion.span 
+                className="flex items-center gap-2 text-muted-foreground"
+                layoutId={`location-${job.id}`}
               >
-                {skill}
+                <MapPin className="w-4 h-4 text-primary" />
+                {job.location}
+              </motion.span>
+              <span className="flex items-center gap-2 text-muted-foreground">
+                <Building2 className="w-4 h-4 text-primary" />
+                {job.company}
               </span>
-            ))}
-            {job.skills.length > 4 && (
-              <span className="px-2 py-1 text-xs text-muted-foreground">
-                +{job.skills.length - 4} more
+              <span className="flex items-center gap-2 text-muted-foreground">
+                <Calendar className="w-4 h-4 text-primary" />
+                Saved {job.savedAt}
               </span>
-            )}
+              <span className="flex items-center gap-2 text-muted-foreground">
+                <Clock className="w-4 h-4 text-primary" />
+                Expires in {job.expiresIn}
+              </span>
+            </motion.div>
+
+            {/* Skills */}
+            <motion.div 
+              className="mb-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <h4 className="text-sm font-medium text-foreground mb-3">Skills & Requirements</h4>
+              <div className="flex flex-wrap gap-2">
+                {job.skills.map((skill, i) => (
+                  <motion.span
+                    key={skill}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.25 + i * 0.05 }}
+                    className="px-3 py-1.5 text-sm bg-primary/10 text-primary rounded-full"
+                  >
+                    {skill}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Cover Letter Status */}
+            <motion.div 
+              className="mb-8 p-4 rounded-2xl bg-muted/30"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="flex items-center gap-3">
+                <div className={`
+                  w-10 h-10 rounded-full flex items-center justify-center
+                  ${job.hasCoverLetter ? "bg-green-500/20 text-green-600" : "bg-muted text-muted-foreground"}
+                `}>
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">
+                    {job.hasCoverLetter ? "Cover letter ready" : "No cover letter yet"}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {job.hasCoverLetter 
+                      ? "Your personalized letter is prepared for this role" 
+                      : "Create a tailored cover letter when you're ready"
+                    }
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Motivational message */}
+            <motion.div 
+              className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-primary/10 to-transparent border border-primary/10"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+            >
+              <p className="text-foreground italic">
+                {job.matchPercentage >= 85 
+                  ? "✨ This opportunity aligns beautifully with your experience. Trust your journey."
+                  : job.matchPercentage >= 70
+                    ? "🌱 Strong potential here. Every application is a step forward."
+                    : "💫 Growth happens outside comfort zones. You've got this."
+                }
+              </p>
+            </motion.div>
+
+            {/* Actions */}
+            <motion.div 
+              className="flex gap-3"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Link to={`/jobs/${job.id}`} className="flex-1">
+                <Button className="w-full rounded-xl h-12 text-base" size="lg">
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Full Details
+                </Button>
+              </Link>
+              <Button 
+                variant="outline" 
+                className="rounded-xl h-12 px-6"
+                onClick={onClose}
+              >
+                Close
+              </Button>
+            </motion.div>
           </div>
-
-          {/* Match Score with Gentle Messaging */}
-          <div className="pt-4 border-t border-border/30">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-muted-foreground">Your alignment</span>
-              <span className="text-sm font-medium text-primary">
-                {job.matchPercentage}%
-              </span>
-            </div>
-            <div className="h-1.5 bg-muted rounded-full overflow-hidden mb-3">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${job.matchPercentage}%` }}
-                transition={{ delay: index * 0.08 + 0.3, duration: 0.8, ease: "easeOut" }}
-                className="h-full bg-gradient-to-r from-primary/70 to-primary rounded-full"
-              />
-            </div>
-
-            {/* Motivational micro-message */}
-            <MotivationalMessage
-              matchPercentage={job.matchPercentage}
-              variant="inline"
-              className="text-xs"
-            />
-          </div>
-
-          {/* CTA Button */}
-          <Button
-            variant="secondary"
-            size="sm"
-            className="w-full mt-4 rounded-xl"
-          >
-            Explore This Opportunity
-          </Button>
-        </div>
-      </Link>
-    </motion.div>
+        </motion.div>
+      </div>
+    </>
   );
 };
 
-// Empty State Component
+// Empty State
 const EmptyState = () => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    className="py-16"
+    className="py-24"
   >
-    <div className="max-w-lg mx-auto text-center p-12 rounded-3xl bg-gradient-to-br from-primary/5 to-transparent border border-primary/10">
-      <div className="w-20 h-20 mx-auto mb-8 rounded-full bg-primary/10 flex items-center justify-center zen-float">
-        <Bookmark className="w-10 h-10 text-primary" />
+    <div className="max-w-md mx-auto text-center">
+      <div className="w-24 h-24 mx-auto mb-8 rounded-3xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+        <Bookmark className="w-12 h-12 text-primary" />
       </div>
-
-      <h2 className="text-2xl font-light text-foreground mb-4">
+      <h2 className="text-2xl font-light text-foreground mb-3">
         Your collection awaits
       </h2>
-
-      <p className="text-muted-foreground mb-8 leading-relaxed">
-        When you find opportunities that spark interest, save them here.
-        There's no rush — take your time exploring.
+      <p className="text-muted-foreground mb-8">
+        Save opportunities that resonate with you. They'll appear here, organized and ready.
       </p>
-
       <Link to="/">
-        <Button className="rounded-xl">
-          Explore Opportunities
-        </Button>
+        <Button className="rounded-xl">Explore Opportunities</Button>
       </Link>
-
-      <p className="text-xs text-muted-foreground mt-8 italic">
-        "Every journey begins with a single step"
-      </p>
     </div>
   </motion.div>
 );
 
 const Jobs = () => {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [filterCoverLetter, setFilterCoverLetter] = useState(false);
-  const [filterHighMatch, setFilterHighMatch] = useState(false);
-  const [sortBy, setSortBy] = useState<"newest" | "expiring" | "match">("newest");
-
-  // Filter jobs
-  let filteredJobs = [...mockJobs];
-  if (filterCoverLetter) {
-    filteredJobs = filteredJobs.filter(job => job.hasCoverLetter);
-  }
-  if (filterHighMatch) {
-    filteredJobs = filteredJobs.filter(job => job.matchPercentage >= 70);
-  }
+  const [selectedJob, setSelectedJob] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<"match" | "newest" | "expiring">("match");
 
   // Sort jobs
-  const sortedJobs = filteredJobs.sort((a, b) => {
+  const sortedJobs = [...mockJobs].sort((a, b) => {
     switch (sortBy) {
-      case "newest":
-        return parseSavedAt(a.savedAt) - parseSavedAt(b.savedAt);
-      case "expiring":
-        return parseExpiresIn(a.expiresIn) - parseExpiresIn(b.expiresIn);
       case "match":
         return b.matchPercentage - a.matchPercentage;
+      case "newest":
+        return parseInt(a.savedAt) - parseInt(b.savedAt);
+      case "expiring":
+        return parseInt(a.expiresIn) - parseInt(b.expiresIn);
       default:
         return 0;
     }
   });
 
-  // Stats
+  const selectedJobData = mockJobs.find(j => j.id === selectedJob);
   const highMatchCount = mockJobs.filter(j => j.matchPercentage >= 70).length;
-  const withCoverLetterCount = mockJobs.filter(j => j.hasCoverLetter).length;
-  const contextual = getContextualMessage(mockJobs.length);
 
   return (
     <ThemedLayout>
-      <main className="container max-w-6xl mx-auto px-4 py-8">
+      <main className="container max-w-7xl mx-auto px-4 py-8">
+        
+        {/* Header Section */}
+        <section className="mb-12">
+          <motion.div 
+            className="flex items-center gap-3 mb-4"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center">
+              <Bookmark className="w-6 h-6 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-light text-foreground">
+                Saved Opportunities
+              </h1>
+              <p className="text-muted-foreground">
+                {mockJobs.length} possibilities • {highMatchCount} strong matches
+              </p>
+            </div>
+          </motion.div>
 
-        {/* Section 1: Mindfulness Header */}
-        <section className="mb-8">
-          <AffirmationBanner
-            className="mb-4"
-            autoRotate={true}
-            rotateInterval={10000}
-          />
-          <div className="flex justify-center">
-            <BreathingExercise compact={true} />
-          </div>
-        </section>
-
-        {/* Section 2: Page Header with Gentle Stats */}
-        <section className="mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
+          {/* Sort Pills */}
+          <motion.div 
+            className="flex gap-2 mt-6"
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full text-primary text-sm mb-4"
-          >
-            <Bookmark className="w-4 h-4" />
-            <span>Saved for your journey</span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-light text-foreground mb-3"
           >
-            Your Saved Opportunities
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg text-muted-foreground italic mb-6"
-          >
-            {mockJobs.length} possibilities waiting when you're ready
-          </motion.p>
-
-          {/* Gentle Statistics */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-wrap gap-6 text-sm text-muted-foreground"
-          >
-            <span className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-primary" />
-              {highMatchCount} strong matches
-            </span>
-            <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
-              {withCoverLetterCount} with cover letters ready
-            </span>
+            {[
+              { value: "match", label: "Best Match", icon: Star },
+              { value: "newest", label: "Recently Saved", icon: Clock },
+              { value: "expiring", label: "Expiring Soon", icon: Calendar },
+            ].map(({ value, label, icon: Icon }) => (
+              <button
+                key={value}
+                onClick={() => setSortBy(value as typeof sortBy)}
+                className={`
+                  flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all
+                  ${sortBy === value 
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                    : "bg-card border border-border/50 text-muted-foreground hover:border-primary/30 hover:text-foreground"
+                  }
+                `}
+              >
+                <Icon className="w-4 h-4" />
+                {label}
+              </button>
+            ))}
           </motion.div>
         </section>
 
-        {/* Section 3: Contextual Motivational Card */}
-        <section className="mb-8">
-          <MindfulCard
-            className="bg-gradient-to-br from-primary/5 to-transparent"
-            glowOnHover={false}
-            delay={0.3}
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center zen-breathing">
-                <Leaf className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-lg font-light text-foreground">
-                  {contextual.message}
-                </p>
-                <p className="text-sm text-muted-foreground mt-1 italic">
-                  {contextual.submessage}
-                </p>
-              </div>
-            </div>
-          </MindfulCard>
-        </section>
-
-        {/* Section 4: Filters and View Controls */}
-        <section className="py-4 mb-6 sticky top-[73px] z-40 bg-background/80 backdrop-blur-md border-b border-border/30 -mx-4 px-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {/* Sort and Filters */}
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="text-xs text-muted-foreground uppercase tracking-wider">
-                Arrange by:
-              </span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as "newest" | "expiring" | "match")}
-                className="px-4 py-2 bg-card/80 border border-border/50 rounded-full text-sm focus:outline-none focus:border-primary transition-all cursor-pointer"
-              >
-                <option value="newest">Newest Saved</option>
-                <option value="expiring">Expiring Soon</option>
-                <option value="match">Best Alignment</option>
-              </select>
-
-              {/* Filter Pills */}
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setFilterCoverLetter(!filterCoverLetter)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all ${
-                    filterCoverLetter
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card/80 border border-border/50 hover:border-primary/50"
-                  }`}
-                >
-                  <FileText className="w-3.5 h-3.5" />
-                  Has Letter
-                </button>
-                <button
-                  onClick={() => setFilterHighMatch(!filterHighMatch)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all ${
-                    filterHighMatch
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card/80 border border-border/50 hover:border-primary/50"
-                  }`}
-                >
-                  <Star className="w-3.5 h-3.5" />
-                  Strong Match
-                </button>
-              </div>
-            </div>
-
-            {/* View Toggle */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-2 rounded-lg transition-all ${
-                  viewMode === "grid"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card/80 border border-border/50 hover:border-primary/50"
-                }`}
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className={`p-2 rounded-lg transition-all ${
-                  viewMode === "list"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card/80 border border-border/50 hover:border-primary/50"
-                }`}
-              >
-                <List className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 5: Jobs Collection with Mindful Breaks */}
+        {/* Bento Grid */}
         {sortedJobs.length > 0 ? (
-          <section className="mb-12">
-            <div className={
-              viewMode === "grid"
-                ? "grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-                : "flex flex-col gap-4"
-            }>
+          <motion.section 
+            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[minmax(180px,auto)]"
+            layout
+          >
+            <AnimatePresence>
               {sortedJobs.map((job, index) => (
-                <Fragment key={job.id}>
-                  <MindfulJobCard job={job} index={index} />
-
-                  {/* Insert mindful break every 5 jobs */}
-                  {(index + 1) % 5 === 0 && index < sortedJobs.length - 1 && (
-                    <MindfulBreak index={Math.floor(index / 5)} />
-                  )}
-                </Fragment>
+                <BentoJobCard
+                  key={job.id}
+                  job={job}
+                  index={index}
+                  isSelected={selectedJob === job.id}
+                  onSelect={setSelectedJob}
+                />
               ))}
-            </div>
-          </section>
+            </AnimatePresence>
+          </motion.section>
         ) : (
           <EmptyState />
         )}
 
-        {/* Section 6: Closing Affirmation */}
+        {/* Expanded Card Modal */}
+        <AnimatePresence>
+          {selectedJobData && (
+            <ExpandedCard 
+              job={selectedJobData} 
+              onClose={() => setSelectedJob(null)} 
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Footer Message */}
         {sortedJobs.length > 0 && (
-          <section className="py-16 text-center">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-            >
-              <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-primary/10">
-                <Leaf className="w-8 h-8 text-primary" />
-              </div>
-
-              <p className="text-xl font-light text-foreground mb-2">
-                You've reached the end of your saved opportunities.
-              </p>
-              <p className="text-muted-foreground mb-8">
-                Remember: the right opportunity is also looking for you.
-              </p>
-
-              <div className="flex justify-center gap-4">
-                <Button
-                  variant="secondary"
-                  className="rounded-xl"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                >
-                  <ArrowUp className="w-4 h-4 mr-2" />
-                  Back to Top
-                </Button>
-                <Link to="/">
-                  <Button variant="ghost" className="rounded-xl">
-                    <Home className="w-4 h-4 mr-2" />
-                    Return Home
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
-          </section>
+          <motion.div 
+            className="text-center py-16"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-muted-foreground italic">
+              "Every saved opportunity is a seed of possibility" 🌱
+            </p>
+          </motion.div>
         )}
       </main>
 
