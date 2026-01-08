@@ -37,7 +37,7 @@ const ColorfulCard = ({
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    className={`relative ${color.bg} ${color.border} border rounded-2xl p-6 overflow-hidden ${className}`}
+    className={`relative ${color.border} border rounded-2xl p-6 overflow-hidden ${className}`}
   >
     {/* Tape accent */}
     {tapePosition === "left" && (
