@@ -12,6 +12,54 @@ import { mockCompany } from "@/data/mockData";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
+// Semantic color palette for different sections
+const sectionColors = {
+  purpose: { bg: "bg-violet-50", border: "border-violet-200", accent: "bg-violet-500", text: "text-violet-600", light: "bg-violet-100", tape: "bg-violet-400" },
+  values: { bg: "bg-amber-50", border: "border-amber-200", accent: "bg-amber-500", text: "text-amber-600", light: "bg-amber-100", tape: "bg-amber-400" },
+  team: { bg: "bg-sky-50", border: "border-sky-200", accent: "bg-sky-500", text: "text-sky-600", light: "bg-sky-100", tape: "bg-sky-400" },
+  interview: { bg: "bg-rose-50", border: "border-rose-200", accent: "bg-rose-500", text: "text-rose-600", light: "bg-rose-100", tape: "bg-rose-400" },
+  news: { bg: "bg-teal-50", border: "border-teal-200", accent: "bg-teal-500", text: "text-teal-600", light: "bg-teal-100", tape: "bg-teal-400" },
+  journey: { bg: "bg-indigo-50", border: "border-indigo-200", accent: "bg-indigo-500", text: "text-indigo-600", light: "bg-indigo-100", tape: "bg-indigo-400" },
+};
+
+// Colorful card wrapper with tape accent
+const ColorfulCard = ({ 
+  children, 
+  color, 
+  tapePosition = "left",
+  className = "" 
+}: { 
+  children: React.ReactNode; 
+  color: typeof sectionColors.purpose;
+  tapePosition?: "left" | "right" | "top";
+  className?: string;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className={`relative ${color.bg} ${color.border} border rounded-2xl p-6 overflow-hidden ${className}`}
+  >
+    {/* Tape accent */}
+    {tapePosition === "left" && (
+      <div className={`absolute left-0 top-6 bottom-6 w-1.5 ${color.tape} rounded-r-full`} />
+    )}
+    {tapePosition === "top" && (
+      <div className={`absolute top-0 left-6 right-6 h-1.5 ${color.tape} rounded-b-full`} />
+    )}
+    {tapePosition === "right" && (
+      <div className={`absolute right-0 top-6 bottom-6 w-1.5 ${color.tape} rounded-l-full`} />
+    )}
+    {children}
+  </motion.div>
+);
+
+// Colorful icon badge
+const IconBadge = ({ icon, color }: { icon: React.ReactNode; color: typeof sectionColors.purpose }) => (
+  <div className={`w-10 h-10 rounded-xl ${color.light} ${color.text} flex items-center justify-center`}>
+    {icon}
+  </div>
+);
+
 const CompanyResearch = () => {
   const { id } = useParams();
   const company = mockCompany;
@@ -149,75 +197,83 @@ ${company.interviewTips.map(tip => `• ${tip}`).join("\n")}
 
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6">
-              {/* What They Do */}
-              <MindfulCard
-                title="Understanding Their Purpose"
-                subtitle="What drives this company"
-                icon={<Target className="w-5 h-5" />}
-                delay={0.1}
-              >
-                <p className="text-foreground/90 leading-relaxed mb-6">
+              {/* What They Do - Violet */}
+              <ColorfulCard color={sectionColors.purpose} tapePosition="left">
+                <div className="flex items-center gap-3 mb-4">
+                  <IconBadge icon={<Target className="w-5 h-5" />} color={sectionColors.purpose} />
+                  <div>
+                    <h3 className="font-semibold text-foreground">Understanding Their Purpose</h3>
+                    <p className="text-sm text-muted-foreground">What drives this company</p>
+                  </div>
+                </div>
+                <p className="text-foreground/90 leading-relaxed mb-6 pl-1">
                   {company.whatTheyDo}
                 </p>
 
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <InsightCard
-                    title="Problem They Solve"
-                    content={company.problemSolved}
-                    icon={<Lightbulb className="w-5 h-5" />}
-                    delay={0.2}
-                  />
-                  <InsightCard
-                    title="Their Promise"
-                    content={company.valueProposition}
-                    icon={<Star className="w-5 h-5" />}
-                    delay={0.3}
-                  />
+                  <div className={`p-4 rounded-xl ${sectionColors.purpose.light} border ${sectionColors.purpose.border}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Lightbulb className={`w-4 h-4 ${sectionColors.purpose.text}`} />
+                      <p className={`text-xs font-medium ${sectionColors.purpose.text} uppercase tracking-wider`}>Problem They Solve</p>
+                    </div>
+                    <p className="text-sm text-foreground">{company.problemSolved}</p>
+                  </div>
+                  <div className={`p-4 rounded-xl ${sectionColors.purpose.light} border ${sectionColors.purpose.border}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Star className={`w-4 h-4 ${sectionColors.purpose.text}`} />
+                      <p className={`text-xs font-medium ${sectionColors.purpose.text} uppercase tracking-wider`}>Their Promise</p>
+                    </div>
+                    <p className="text-sm text-foreground">{company.valueProposition}</p>
+                  </div>
                 </div>
-              </MindfulCard>
+              </ColorfulCard>
 
-              {/* Core Values */}
-              <MindfulCard
-                title="Values That Guide Them"
-                subtitle="See if they resonate with you"
-                icon={<Heart className="w-5 h-5" />}
-                delay={0.2}
-              >
-                <div className="grid grid-cols-2 gap-4">
+              {/* Core Values - Amber */}
+              <ColorfulCard color={sectionColors.values} tapePosition="top">
+                <div className="flex items-center gap-3 mb-4">
+                  <IconBadge icon={<Heart className="w-5 h-5" />} color={sectionColors.values} />
+                  <div>
+                    <h3 className="font-semibold text-foreground">Values That Guide Them</h3>
+                    <p className="text-sm text-muted-foreground">See if they resonate with you</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
                   {company.coreValues.map((value, index) => (
                     <motion.div
                       key={value}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.3 + index * 0.1 }}
-                      className="p-4 rounded-2xl bg-primary/5 border border-primary/10 text-center"
+                      className={`p-4 rounded-xl ${sectionColors.values.light} border ${sectionColors.values.border} text-center`}
                     >
                       <p className="font-medium text-foreground">{value}</p>
                     </motion.div>
                   ))}
                 </div>
 
-                <div className="mt-6 p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent">
-                  <p className="text-sm text-muted-foreground italic text-center">
+                <div className={`mt-6 p-4 rounded-xl bg-gradient-to-br from-amber-100/80 to-amber-50/50 border ${sectionColors.values.border}`}>
+                  <p className="text-sm text-amber-700 italic text-center">
                     "Reflect on which of these values align with your own journey"
                   </p>
                 </div>
-              </MindfulCard>
+              </ColorfulCard>
 
-              {/* Team Culture */}
-              <MindfulCard
-                title="The People & Culture"
-                subtitle="Who you'll be working with"
-                icon={<Users className="w-5 h-5" />}
-                delay={0.3}
-              >
+              {/* Team Culture - Sky Blue */}
+              <ColorfulCard color={sectionColors.team} tapePosition="right">
+                <div className="flex items-center gap-3 mb-4">
+                  <IconBadge icon={<Users className="w-5 h-5" />} color={sectionColors.team} />
+                  <div>
+                    <h3 className="font-semibold text-foreground">The People & Culture</h3>
+                    <p className="text-sm text-muted-foreground">Who you'll be working with</p>
+                  </div>
+                </div>
                 <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                  <div className="p-4 rounded-2xl bg-muted/50">
-                    <p className="text-xs text-primary uppercase tracking-wider mb-1">Key Focus</p>
+                  <div className={`p-4 rounded-xl ${sectionColors.team.light} border ${sectionColors.team.border}`}>
+                    <p className={`text-xs ${sectionColors.team.text} uppercase tracking-wider mb-1 font-medium`}>Key Focus</p>
                     <p className="text-foreground">{company.keyFocus}</p>
                   </div>
-                  <div className="p-4 rounded-2xl bg-muted/50">
-                    <p className="text-xs text-primary uppercase tracking-wider mb-1">Team Style</p>
+                  <div className={`p-4 rounded-xl ${sectionColors.team.light} border ${sectionColors.team.border}`}>
+                    <p className={`text-xs ${sectionColors.team.text} uppercase tracking-wider mb-1 font-medium`}>Team Style</p>
                     <p className="text-foreground">{company.teamStyle}</p>
                   </div>
                 </div>
@@ -228,66 +284,71 @@ ${company.interviewTips.map(tip => `• ${tip}`).join("\n")}
                     {company.targetCustomers.map((customer) => (
                       <span
                         key={customer}
-                        className="px-4 py-2 rounded-full bg-primary/10 text-sm text-foreground"
+                        className={`px-4 py-2 rounded-full ${sectionColors.team.light} ${sectionColors.team.text} text-sm font-medium border ${sectionColors.team.border}`}
                       >
                         {customer}
                       </span>
                     ))}
                   </div>
                 </div>
-              </MindfulCard>
+              </ColorfulCard>
 
-              {/* Interview Prep */}
-              <MindfulCard
-                title="Prepare with Confidence"
-                subtitle="Insights to help you shine"
-                icon={<Sparkles className="w-5 h-5" />}
-                delay={0.4}
-              >
+              {/* Interview Prep - Rose */}
+              <ColorfulCard color={sectionColors.interview} tapePosition="left">
+                <div className="flex items-center gap-3 mb-4">
+                  <IconBadge icon={<Sparkles className="w-5 h-5" />} color={sectionColors.interview} />
+                  <div>
+                    <h3 className="font-semibold text-foreground">Prepare with Confidence</h3>
+                    <p className="text-sm text-muted-foreground">Insights to help you shine</p>
+                  </div>
+                </div>
                 <p className="text-muted-foreground mb-6">
                   These gentle reminders will help you feel prepared and centered.
                 </p>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {company.interviewTips.map((tip, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.5 + index * 0.1 }}
-                      className="flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-r from-primary/5 to-transparent border-l-4 border-primary"
+                      className={`flex items-start gap-4 p-4 rounded-xl ${sectionColors.interview.light} border-l-4 ${sectionColors.interview.border} border`}
+                      style={{ borderLeftColor: 'rgb(244 63 94)' }}
                     >
-                      <span className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-medium flex-shrink-0">
+                      <span className={`w-8 h-8 rounded-full ${sectionColors.interview.accent} flex items-center justify-center text-white font-medium flex-shrink-0 text-sm`}>
                         {index + 1}
                       </span>
                       <p className="text-foreground pt-1">{tip}</p>
                     </motion.div>
                   ))}
                 </div>
-              </MindfulCard>
+              </ColorfulCard>
 
-              {/* Recent News */}
-              <MindfulCard
-                title="Recent Developments"
-                subtitle="Stay informed"
-                icon={<Trophy className="w-5 h-5" />}
-                delay={0.5}
-              >
-                <div className="space-y-4">
+              {/* Recent News - Teal */}
+              <ColorfulCard color={sectionColors.news} tapePosition="top">
+                <div className="flex items-center gap-3 mb-4">
+                  <IconBadge icon={<Trophy className="w-5 h-5" />} color={sectionColors.news} />
+                  <div>
+                    <h3 className="font-semibold text-foreground">Recent Developments</h3>
+                    <p className="text-sm text-muted-foreground">Stay informed</p>
+                  </div>
+                </div>
+                <div className="space-y-3">
                   {company.recentNews.map((news, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.6 + index * 0.1 }}
-                      className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30"
+                      className={`flex items-center gap-4 p-4 rounded-xl ${sectionColors.news.light} border ${sectionColors.news.border}`}
                     >
-                      <div className="w-2 h-2 rounded-full bg-primary" />
+                      <div className={`w-2.5 h-2.5 rounded-full ${sectionColors.news.accent}`} />
                       <p className="text-foreground">{news}</p>
                     </motion.div>
                   ))}
                 </div>
-              </MindfulCard>
+              </ColorfulCard>
             </div>
           </div>
 
