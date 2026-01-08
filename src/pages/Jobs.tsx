@@ -13,11 +13,14 @@ import {
   Heart,
   Building2,
   Calendar,
-  Leaf
+  Leaf,
+  PenLine,
+  Check
 } from "lucide-react";
 import ThemedLayout from "@/components/ThemedLayout";
 import ThemedFooter from "@/components/ThemedFooter";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { mockJobs } from "@/data/mockData";
 
 // Tape colors for the journal feel
@@ -53,12 +56,18 @@ const getCardSize = (matchPercentage: number, index: number): "large" | "medium"
 const JournalJobCard = ({ 
   job, 
   index, 
-  onSelect 
+  onSelect,
+  note,
+  onNoteChange
 }: { 
   job: typeof mockJobs[0]; 
   index: number;
   onSelect: (id: string | null) => void;
+  note: string;
+  onNoteChange: (jobId: string, note: string) => void;
 }) => {
+  const [isWritingNote, setIsWritingNote] = useState(false);
+  const [noteText, setNoteText] = useState(note);
   const size = getCardSize(job.matchPercentage, index);
   const tapeColor = getTapeColor(job.matchPercentage, index);
   const rotation = getRotation(index);
@@ -69,119 +78,228 @@ const JournalJobCard = ({
     small: "md:col-span-1 md:row-span-1"
   };
 
+  const handleSaveNote = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onNoteChange(job.id, noteText);
+    setIsWritingNote(false);
+  };
+
+  const handleOpenNoteEditor = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsWritingNote(true);
+  };
+
   return (
-    <motion.div
-      layoutId={`card-${job.id}`}
-      onClick={() => onSelect(job.id)}
-      className={`${sizeClasses[size]} cursor-pointer group relative`}
-      initial={{ opacity: 0, y: 20, rotate: rotation }}
-      animate={{ opacity: 1, y: 0, rotate: rotation }}
-      whileHover={{ 
-        scale: 1.03, 
-        rotate: 0,
-        y: -8,
-        transition: { type: "spring", stiffness: 400, damping: 25 }
-      }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ 
-        delay: index * 0.06, 
-        duration: 0.5,
-        layout: { type: "spring", stiffness: 350, damping: 30 }
-      }}
-    >
-      {/* Paper card */}
-      <div className={`
-        h-full min-h-[200px] p-6 rounded-lg relative
-        bg-gradient-to-b from-[hsl(var(--card))] to-[hsl(var(--card)/0.95)]
-        shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.05)]
-        group-hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.15),0_4px_12px_rgba(0,0,0,0.08)]
-        transition-shadow duration-500
-        ${size === "large" ? "min-h-[340px]" : size === "medium" ? "min-h-[300px]" : "min-h-[200px]"}
-      `}>
-        
-        {/* Decorative tape at top */}
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <motion.div 
-            className={`${tapeColor} w-16 h-7 rounded-sm shadow-sm`}
-            style={{ 
-              transform: "rotate(-2deg)",
-              opacity: 0.9
-            }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: index * 0.06 + 0.2, type: "spring" }}
-          />
-        </div>
-
-        {/* Content */}
-        <div className="h-full flex flex-col pt-2">
+    <>
+      <motion.div
+        layoutId={`card-${job.id}`}
+        onClick={() => onSelect(job.id)}
+        className={`${sizeClasses[size]} cursor-pointer group relative`}
+        initial={{ opacity: 0, y: 20, rotate: rotation }}
+        animate={{ opacity: 1, y: 0, rotate: rotation }}
+        whileHover={{ 
+          scale: 1.03, 
+          rotate: 0,
+          y: -8,
+          transition: { type: "spring", stiffness: 400, damping: 25 }
+        }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ 
+          delay: index * 0.06, 
+          duration: 0.5,
+          layout: { type: "spring", stiffness: 350, damping: 30 }
+        }}
+      >
+        {/* Paper card */}
+        <div className={`
+          h-full min-h-[200px] p-6 rounded-lg relative
+          bg-gradient-to-b from-[hsl(var(--card))] to-[hsl(var(--card)/0.95)]
+          shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.05)]
+          group-hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.15),0_4px_12px_rgba(0,0,0,0.08)]
+          transition-shadow duration-500
+          ${size === "large" ? "min-h-[340px]" : size === "medium" ? "min-h-[300px]" : "min-h-[200px]"}
+        `}>
           
-          {/* Company name - styled like journal header */}
-          <div className="flex items-center gap-2 mb-3">
-            <Building2 className="w-4 h-4 text-primary/70" />
-            <motion.span 
-              className="text-sm font-medium text-primary"
-              layoutId={`company-${job.id}`}
-            >
-              {job.company}
-            </motion.span>
+          {/* Decorative tape at top */}
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+            <motion.div 
+              className={`${tapeColor} w-16 h-7 rounded-sm shadow-sm`}
+              style={{ 
+                transform: "rotate(-2deg)",
+                opacity: 0.9
+              }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: index * 0.06 + 0.2, type: "spring" }}
+            />
           </div>
 
-          {/* Job Title - Primary Focus */}
-          <motion.h3 
-            className={`
-              font-semibold text-foreground mb-3 leading-tight
-              ${size === "large" ? "text-2xl" : size === "medium" ? "text-xl" : "text-lg"}
-            `}
-            layoutId={`title-${job.id}`}
+          {/* Write note button */}
+          <motion.button
+            onClick={handleOpenNoteEditor}
+            className="absolute top-3 right-3 p-2 rounded-full bg-muted/50 opacity-0 group-hover:opacity-100 hover:bg-muted transition-all z-20"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
           >
-            {job.title}
-          </motion.h3>
+            <PenLine className="w-4 h-4 text-muted-foreground" />
+          </motion.button>
 
-          {/* Skills as handwritten notes */}
-          <div className="flex flex-wrap gap-1 mb-4">
-            {job.skills.slice(0, size === "large" ? 4 : size === "medium" ? 3 : 2).map((skill, i) => (
-              <span
-                key={skill}
-                className="text-xs text-muted-foreground italic"
+          {/* Content */}
+          <div className="h-full flex flex-col pt-2">
+            
+            {/* Company name - styled like journal header */}
+            <div className="flex items-center gap-2 mb-3">
+              <Building2 className="w-4 h-4 text-primary/70" />
+              <motion.span 
+                className="text-sm font-medium text-primary"
+                layoutId={`company-${job.id}`}
               >
-                {skill}{i < (size === "large" ? 3 : size === "medium" ? 2 : 1) ? " •" : ""}
-              </span>
-            ))}
-          </div>
+                {job.company}
+              </motion.span>
+            </div>
 
-          {/* Spacer */}
-          <div className="flex-1" />
-
-          {/* Bottom section - handwritten style */}
-          <div className="space-y-2">
-            {/* Saved date - handwritten feel */}
-            <motion.p 
-              className="text-sm text-muted-foreground/80 italic font-light"
-              layoutId={`saved-${job.id}`}
+            {/* Job Title - Primary Focus */}
+            <motion.h3 
+              className={`
+                font-semibold text-foreground mb-3 leading-tight
+                ${size === "large" ? "text-2xl" : size === "medium" ? "text-xl" : "text-lg"}
+              `}
+              layoutId={`title-${job.id}`}
             >
-              Saved {job.savedAt}
-            </motion.p>
+              {job.title}
+            </motion.h3>
 
-            {/* Cover letter indicator */}
-            {job.hasCoverLetter && (
+            {/* Personal note preview */}
+            {note && (
               <motion.div 
-                className="flex items-center gap-1.5 text-primary text-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: index * 0.06 + 0.4 }}
+                className="mb-3 p-2 rounded-md bg-primary/5 border-l-2 border-primary/30"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
               >
-                <FileText className="w-3.5 h-3.5" />
-                <span className="italic">Letter ready</span>
+                <p className="text-xs text-muted-foreground italic line-clamp-2">
+                  "{note}"
+                </p>
               </motion.div>
             )}
-          </div>
-        </div>
 
-        {/* Subtle paper texture overlay */}
-        <div className="absolute inset-0 rounded-lg pointer-events-none opacity-[0.02] bg-[radial-gradient(circle_at_50%_50%,transparent_0%,hsl(var(--foreground))_100%)]" />
-      </div>
-    </motion.div>
+            {/* Skills as handwritten notes */}
+            <div className="flex flex-wrap gap-1 mb-4">
+              {job.skills.slice(0, size === "large" ? 4 : size === "medium" ? 3 : 2).map((skill, i) => (
+                <span
+                  key={skill}
+                  className="text-xs text-muted-foreground italic"
+                >
+                  {skill}{i < (size === "large" ? 3 : size === "medium" ? 2 : 1) ? " •" : ""}
+                </span>
+              ))}
+            </div>
+
+            {/* Spacer */}
+            <div className="flex-1" />
+
+            {/* Bottom section - handwritten style */}
+            <div className="space-y-2">
+              {/* Saved date - handwritten feel */}
+              <motion.p 
+                className="text-sm text-muted-foreground/80 italic font-light"
+                layoutId={`saved-${job.id}`}
+              >
+                Saved {job.savedAt}
+              </motion.p>
+
+              {/* Cover letter indicator */}
+              {job.hasCoverLetter && (
+                <motion.div 
+                  className="flex items-center gap-1.5 text-primary text-sm"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: index * 0.06 + 0.4 }}
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span className="italic">Letter ready</span>
+                </motion.div>
+              )}
+            </div>
+          </div>
+
+          {/* Subtle paper texture overlay */}
+          <div className="absolute inset-0 rounded-lg pointer-events-none opacity-[0.02] bg-[radial-gradient(circle_at_50%_50%,transparent_0%,hsl(var(--foreground))_100%)]" />
+        </div>
+      </motion.div>
+
+      {/* Note Writing Modal */}
+      <AnimatePresence>
+        {isWritingNote && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsWritingNote(false);
+              }}
+              className="fixed inset-0 bg-background/60 backdrop-blur-sm z-50"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-full max-w-md bg-card rounded-xl shadow-2xl p-6 pointer-events-auto relative">
+                {/* Decorative tape */}
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <div className="bg-[#fff9c4] w-20 h-6 rounded-sm shadow-sm" style={{ transform: "rotate(-1deg)" }} />
+                </div>
+                
+                <div className="pt-2">
+                  <div className="flex items-center gap-2 mb-4">
+                    <PenLine className="w-5 h-5 text-primary" />
+                    <h3 className="text-lg font-medium text-foreground">Personal Reflection</h3>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-4 italic">
+                    How does this opportunity make you feel? What draws you to it?
+                  </p>
+                  
+                  <Textarea
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                    placeholder="Write your thoughts here..."
+                    className="min-h-[120px] resize-none bg-muted/30 border-muted focus:border-primary/30 italic"
+                    autoFocus
+                  />
+                  
+                  <div className="flex gap-3 mt-4">
+                    <Button
+                      onClick={handleSaveNote}
+                      className="flex-1 rounded-xl"
+                    >
+                      <Check className="w-4 h-4 mr-2" />
+                      Save Note
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setNoteText(note);
+                        setIsWritingNote(false);
+                      }}
+                      className="rounded-xl"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
@@ -428,6 +546,11 @@ const EmptyState = () => (
 const Jobs = () => {
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"match" | "newest" | "expiring">("newest");
+  const [jobNotes, setJobNotes] = useState<Record<string, string>>({});
+
+  const handleNoteChange = (jobId: string, note: string) => {
+    setJobNotes(prev => ({ ...prev, [jobId]: note }));
+  };
 
   // Sort jobs
   const sortedJobs = [...mockJobs].sort((a, b) => {
@@ -541,6 +664,8 @@ const Jobs = () => {
                   job={job}
                   index={index}
                   onSelect={setSelectedJob}
+                  note={jobNotes[job.id] || ""}
+                  onNoteChange={handleNoteChange}
                 />
               ))}
             </AnimatePresence>
