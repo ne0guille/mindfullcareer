@@ -14,12 +14,12 @@ import { motion } from "framer-motion";
 
 // Semantic color palette for different sections
 const sectionColors = {
-  purpose: { bg: "bg-violet-50", border: "border-violet-200", accent: "bg-violet-500", text: "text-violet-600", light: "bg-violet-100", tape: "bg-violet-400" },
-  values: { bg: "bg-amber-50", border: "border-amber-200", accent: "bg-amber-500", text: "text-amber-600", light: "bg-amber-100", tape: "bg-amber-400" },
-  team: { bg: "bg-sky-50", border: "border-sky-200", accent: "bg-sky-500", text: "text-sky-600", light: "bg-sky-100", tape: "bg-sky-400" },
-  interview: { bg: "bg-rose-50", border: "border-rose-200", accent: "bg-rose-500", text: "text-rose-600", light: "bg-rose-100", tape: "bg-rose-400" },
-  news: { bg: "bg-teal-50", border: "border-teal-200", accent: "bg-teal-500", text: "text-teal-600", light: "bg-teal-100", tape: "bg-teal-400" },
-  journey: { bg: "bg-indigo-50", border: "border-indigo-200", accent: "bg-indigo-500", text: "text-indigo-600", light: "bg-indigo-100", tape: "bg-indigo-400" },
+  purpose: {  border: "border-violet-200", accent: "bg-violet-500", text: "text-violet-600", light: "bg-violet-100", tape: "bg-violet-400" },
+  values: {  border: "border-amber-200", accent: "bg-amber-500", text: "text-amber-600", light: "bg-amber-100", tape: "bg-amber-400" },
+  team: {  border: "border-sky-200", accent: "bg-sky-500", text: "text-sky-600", light: "bg-sky-100", tape: "bg-sky-400" },
+  interview: {  border: "border-rose-200", accent: "bg-rose-500", text: "text-rose-600", light: "bg-rose-100", tape: "bg-rose-400" },
+  news: { border: "border-teal-200", accent: "bg-teal-500", text: "text-teal-600", light: "bg-teal-100", tape: "bg-teal-400" },
+  journey: { border: "border-indigo-200", accent: "bg-indigo-500", text: "text-indigo-600", light: "bg-indigo-100", tape: "bg-indigo-400" },
 };
 
 // Colorful card wrapper with tape accent
