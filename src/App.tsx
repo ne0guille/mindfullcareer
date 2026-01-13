@@ -9,6 +9,7 @@ import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
 import CompanyResearch from "./pages/CompanyResearch";
 import CoverLetter from "./pages/CoverLetter";
+import ChromeExtension from "./pages/ChromeExtension";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/jobs/:id" element={<JobDetail />} />
             <Route path="/jobs/:id/cover-letter" element={<CoverLetter />} />
             <Route path="/company/:id" element={<CompanyResearch />} />
+            <Route path="/extension" element={<ChromeExtension />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
