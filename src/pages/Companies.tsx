@@ -226,7 +226,7 @@ const CompanyCard = ({
     >
       <div className={`relative rounded-3xl bg-card/80 backdrop-blur-sm border ${colors.border} p-6 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-black/5`}>
         {/* Color accent bar */}
-        <div className={`absolute top-0 left-8 right-8 h-1 ${colors.accent} rounded-b-full opacity-80`} />
+        <div className={`absolute top-0 left-8 right-8 h-0.5 ${colors.accent} rounded-b-full opacity-40`} />
         
         {/* Header */}
         <div className="flex items-start gap-4 mb-4">
