@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
+import Companies from "./pages/Companies";
 import CompanyResearch from "./pages/CompanyResearch";
 import CoverLetter from "./pages/CoverLetter";
 import ChromeExtension from "./pages/ChromeExtension";
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/jobs/:id" element={<JobDetail />} />
             <Route path="/jobs/:id/cover-letter" element={<CoverLetter />} />
+            <Route path="/companies" element={<Companies />} />
             <Route path="/company/:id" element={<CompanyResearch />} />
             <Route path="/extension" element={<ChromeExtension />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
