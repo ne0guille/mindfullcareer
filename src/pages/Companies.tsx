@@ -8,14 +8,14 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-// Color palette for companies - calm but varied
+// Color palette for companies - soft and transparent
 const companyColors = [
-  { bg: "bg-emerald-50", border: "border-emerald-200", accent: "bg-emerald-500", text: "text-emerald-600", light: "bg-emerald-100", glow: "shadow-emerald-200/50" },
-  { bg: "bg-violet-50", border: "border-violet-200", accent: "bg-violet-500", text: "text-violet-600", light: "bg-violet-100", glow: "shadow-violet-200/50" },
-  { bg: "bg-amber-50", border: "border-amber-200", accent: "bg-amber-500", text: "text-amber-600", light: "bg-amber-100", glow: "shadow-amber-200/50" },
-  { bg: "bg-sky-50", border: "border-sky-200", accent: "bg-sky-500", text: "text-sky-600", light: "bg-sky-100", glow: "shadow-sky-200/50" },
-  { bg: "bg-rose-50", border: "border-rose-200", accent: "bg-rose-500", text: "text-rose-600", light: "bg-rose-100", glow: "shadow-rose-200/50" },
-  { bg: "bg-teal-50", border: "border-teal-200", accent: "bg-teal-500", text: "text-teal-600", light: "bg-teal-100", glow: "shadow-teal-200/50" },
+  { border: "border-emerald-200/60", accent: "bg-emerald-400", text: "text-emerald-500", light: "bg-emerald-50/80", iconBg: "bg-emerald-100/60" },
+  { border: "border-violet-200/60", accent: "bg-violet-400", text: "text-violet-500", light: "bg-violet-50/80", iconBg: "bg-violet-100/60" },
+  { border: "border-amber-200/60", accent: "bg-amber-400", text: "text-amber-500", light: "bg-amber-50/80", iconBg: "bg-amber-100/60" },
+  { border: "border-sky-200/60", accent: "bg-sky-400", text: "text-sky-500", light: "bg-sky-50/80", iconBg: "bg-sky-100/60" },
+  { border: "border-rose-200/60", accent: "bg-rose-400", text: "text-rose-500", light: "bg-rose-50/80", iconBg: "bg-rose-100/60" },
+  { border: "border-teal-200/60", accent: "bg-teal-400", text: "text-teal-500", light: "bg-teal-50/80", iconBg: "bg-teal-100/60" },
 ];
 
 // Mock companies data with color index
@@ -224,9 +224,9 @@ const CompanyCard = ({
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       className="group"
     >
-      <div className={`relative rounded-3xl ${colors.bg} border ${colors.border} p-6 transition-all duration-300 group-hover:shadow-xl ${colors.glow}`}>
+      <div className={`relative rounded-3xl bg-card/80 backdrop-blur-sm border ${colors.border} p-6 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-black/5`}>
         {/* Color accent bar */}
-        <div className={`absolute top-0 left-8 right-8 h-1 ${colors.accent} rounded-b-full`} />
+        <div className={`absolute top-0 left-8 right-8 h-1 ${colors.accent} rounded-b-full opacity-80`} />
         
         {/* Header */}
         <div className="flex items-start gap-4 mb-4">
@@ -234,7 +234,7 @@ const CompanyCard = ({
           <motion.div
             whileHover={{ rotate: [0, -10, 10, 0] }}
             transition={{ duration: 0.5 }}
-            className={`w-14 h-14 rounded-2xl ${colors.light} flex items-center justify-center flex-shrink-0 border ${colors.border}`}
+            className={`w-14 h-14 rounded-2xl ${colors.iconBg} flex items-center justify-center flex-shrink-0 border ${colors.border}`}
           >
             <Building2 className={`w-7 h-7 ${colors.text}`} />
           </motion.div>
