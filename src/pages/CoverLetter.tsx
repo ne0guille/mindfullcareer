@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Sparkles, Heart, Download, Copy, CheckCircle2, Lightbulb, Briefcase, Check } from "lucide-react";
+import { ArrowLeft, Sparkles, Heart, Download, Copy, CheckCircle2, Lightbulb, Briefcase, Check, RefreshCw } from "lucide-react";
 import ThemedLayout from "@/components/ThemedLayout";
 import ThemedFooter from "@/components/ThemedFooter";
 import ZenContainer from "@/components/zen/ZenContainer";
@@ -34,6 +34,19 @@ const workExperiences = [
   { id: "exp4", title: "Junior Developer", company: "WebSolutions", duration: "2016 - 2018", description: "Started career building responsive websites and learning best practices" },
 ];
 
+const toneOptions = [
+  { id: "professional", label: "Professional", description: "Corporate, finance, law" },
+  { id: "friendly", label: "Friendly", description: "Startups, creative roles" },
+  { id: "bold", label: "Bold", description: "Sales, leadership positions" },
+];
+
+const lengthOptions = [
+  { id: "concise", label: "Concise", words: "~100w" },
+  { id: "short", label: "Short", words: "~175w" },
+  { id: "medium", label: "Medium", words: "~250w" },
+  { id: "long", label: "Long", words: "~400w" },
+];
+
 const CoverLetter = () => {
   const { id } = useParams();
   const job = mockJobs.find(j => j.id === id) || mockJobs[0];
@@ -45,6 +58,8 @@ const CoverLetter = () => {
   const [copied, setCopied] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [selectedExperiences, setSelectedExperiences] = useState<string[]>([]);
+  const [selectedTone, setSelectedTone] = useState("professional");
+  const [selectedLength, setSelectedLength] = useState("medium");
 
   const journeySteps = [
     { label: "Reflect on your strengths", description: "What makes you unique?", completed: step > 1, current: step === 1 },
@@ -367,6 +382,62 @@ With warm regards,
                       </GentleButton>
                       <GentleButton variant="secondary" size="sm" icon={<Download className="w-4 h-4" />}>
                         Download
+                      </GentleButton>
+                    </div>
+                  </div>
+
+                  {/* Inline Fine-tune Controls */}
+                  <div className="mb-6 p-4 rounded-xl bg-muted/30 border border-border/50">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+                      {/* Tone Selection */}
+                      <div className="flex-1">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Tone</span>
+                        <div className="flex gap-1.5">
+                          {toneOptions.map((tone) => (
+                            <button
+                              key={tone.id}
+                              onClick={() => setSelectedTone(tone.id)}
+                              className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
+                                selectedTone === tone.id
+                                  ? "bg-primary text-primary-foreground shadow-sm"
+                                  : "bg-background/80 text-muted-foreground hover:bg-background hover:text-foreground"
+                              }`}
+                            >
+                              {tone.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Length Selection */}
+                      <div className="flex-1">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Length</span>
+                        <div className="flex gap-1.5">
+                          {lengthOptions.map((length) => (
+                            <button
+                              key={length.id}
+                              onClick={() => setSelectedLength(length.id)}
+                              className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 flex flex-col items-center ${
+                                selectedLength === length.id
+                                  ? "bg-primary text-primary-foreground shadow-sm"
+                                  : "bg-background/80 text-muted-foreground hover:bg-background hover:text-foreground"
+                              }`}
+                            >
+                              <span>{length.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Regenerate Button */}
+                      <GentleButton 
+                        variant="secondary" 
+                        size="sm" 
+                        icon={<RefreshCw className="w-3.5 h-3.5" />}
+                        onClick={handleGenerate}
+                        className="self-end sm:self-center"
+                      >
+                        Regenerate
                       </GentleButton>
                     </div>
                   </div>
