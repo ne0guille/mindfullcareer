@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Sparkles, Heart, Download, Copy, CheckCircle2, Lightbulb, Briefcase, Check, RefreshCw } from "lucide-react";
+import { ArrowLeft, Sparkles, Heart, Download, Copy, CheckCircle2, Lightbulb, Briefcase, Check, RefreshCw, Megaphone, Smile, Zap, FileText } from "lucide-react";
 import ThemedLayout from "@/components/ThemedLayout";
 import ThemedFooter from "@/components/ThemedFooter";
 import ZenContainer from "@/components/zen/ZenContainer";
@@ -35,16 +35,16 @@ const workExperiences = [
 ];
 
 const toneOptions = [
-  { id: "professional", label: "Professional", description: "Corporate, finance, law" },
-  { id: "friendly", label: "Friendly", description: "Startups, creative roles" },
-  { id: "bold", label: "Bold", description: "Sales, leadership positions" },
+  { id: "professional", label: "Pro", icon: Briefcase },
+  { id: "friendly", label: "Warm", icon: Smile },
+  { id: "bold", label: "Bold", icon: Zap },
 ];
 
 const lengthOptions = [
-  { id: "concise", label: "Concise", words: "~100w" },
-  { id: "short", label: "Short", words: "~175w" },
-  { id: "medium", label: "Medium", words: "~250w" },
-  { id: "long", label: "Long", words: "~400w" },
+  { id: "concise", label: "C", fullLabel: "Concise" },
+  { id: "short", label: "S", fullLabel: "Short" },
+  { id: "medium", label: "M", fullLabel: "Medium" },
+  { id: "long", label: "L", fullLabel: "Long" },
 ];
 
 const CoverLetter = () => {
@@ -386,54 +386,53 @@ With warm regards,
                     </div>
                   </div>
 
-                  {/* Floating Toolbar */}
-                  <div className="mb-6 py-2.5 px-3 rounded-full bg-muted/40 border border-border/40 flex items-center gap-2 flex-wrap">
-                    {/* Tone Pills */}
-                    <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider pl-1">Tone</span>
-                    <div className="flex gap-1">
-                      {toneOptions.map((tone) => (
+                  {/* Floating Toolbar - Icon + Text */}
+                  <div className="mb-6 p-1.5 rounded-xl bg-muted/60 border border-border/50 flex items-center gap-1">
+                    {/* Tone Buttons */}
+                    {toneOptions.map((tone) => {
+                      const Icon = tone.icon;
+                      return (
                         <button
                           key={tone.id}
                           onClick={() => setSelectedTone(tone.id)}
-                          className={`px-2.5 py-1 text-xs font-medium rounded-full transition-all duration-200 ${
+                          className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                             selectedTone === tone.id
-                              ? "bg-primary text-primary-foreground shadow-sm"
-                              : "bg-background/60 text-muted-foreground hover:bg-background hover:text-foreground"
+                              ? "bg-primary text-primary-foreground shadow-md"
+                              : "text-muted-foreground hover:bg-background hover:text-foreground"
                           }`}
                         >
-                          {tone.label.slice(0, 4)}
+                          <Icon className="w-4 h-4" />
+                          {tone.label}
                         </button>
-                      ))}
-                    </div>
+                      );
+                    })}
 
-                    <div className="w-px h-4 bg-border/60 mx-1" />
+                    <div className="w-px h-6 bg-border mx-1" />
 
-                    {/* Length Pills */}
-                    <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Len</span>
-                    <div className="flex gap-1">
-                      {lengthOptions.map((length) => (
-                        <button
-                          key={length.id}
-                          onClick={() => setSelectedLength(length.id)}
-                          className={`px-2.5 py-1 text-xs font-medium rounded-full transition-all duration-200 ${
-                            selectedLength === length.id
-                              ? "bg-primary text-primary-foreground shadow-sm"
-                              : "bg-background/60 text-muted-foreground hover:bg-background hover:text-foreground"
-                          }`}
-                        >
-                          {length.label.charAt(0)}
-                        </button>
-                      ))}
-                    </div>
+                    {/* Length Buttons */}
+                    {lengthOptions.map((length) => (
+                      <button
+                        key={length.id}
+                        onClick={() => setSelectedLength(length.id)}
+                        title={length.fullLabel}
+                        className={`w-9 h-9 flex items-center justify-center text-sm font-semibold rounded-lg transition-all duration-200 ${
+                          selectedLength === length.id
+                            ? "bg-primary text-primary-foreground shadow-md"
+                            : "text-muted-foreground hover:bg-background hover:text-foreground"
+                        }`}
+                      >
+                        {length.label}
+                      </button>
+                    ))}
 
                     <div className="flex-1" />
 
                     {/* Regenerate */}
                     <button
                       onClick={handleGenerate}
-                      className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-all duration-200"
+                      className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shadow-md transition-all duration-200"
                     >
-                      <RefreshCw className="w-3 h-3" />
+                      <RefreshCw className="w-4 h-4" />
                       Regen
                     </button>
                   </div>
