@@ -386,60 +386,56 @@ With warm regards,
                     </div>
                   </div>
 
-                  {/* Inline Fine-tune Controls */}
-                  <div className="mb-6 p-4 rounded-xl bg-muted/30 border border-border/50">
-                    <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-                      {/* Tone Selection */}
-                      <div className="flex-1">
-                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Tone</span>
-                        <div className="flex gap-1.5">
-                          {toneOptions.map((tone) => (
-                            <button
-                              key={tone.id}
-                              onClick={() => setSelectedTone(tone.id)}
-                              className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
-                                selectedTone === tone.id
-                                  ? "bg-primary text-primary-foreground shadow-sm"
-                                  : "bg-background/80 text-muted-foreground hover:bg-background hover:text-foreground"
-                              }`}
-                            >
-                              {tone.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Length Selection */}
-                      <div className="flex-1">
-                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Length</span>
-                        <div className="flex gap-1.5">
-                          {lengthOptions.map((length) => (
-                            <button
-                              key={length.id}
-                              onClick={() => setSelectedLength(length.id)}
-                              className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 flex flex-col items-center ${
-                                selectedLength === length.id
-                                  ? "bg-primary text-primary-foreground shadow-sm"
-                                  : "bg-background/80 text-muted-foreground hover:bg-background hover:text-foreground"
-                              }`}
-                            >
-                              <span>{length.label}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Regenerate Button */}
-                      <GentleButton 
-                        variant="secondary" 
-                        size="sm" 
-                        icon={<RefreshCw className="w-3.5 h-3.5" />}
-                        onClick={handleGenerate}
-                        className="self-end sm:self-center"
-                      >
-                        Regenerate
-                      </GentleButton>
+                  {/* Floating Toolbar */}
+                  <div className="mb-6 py-2.5 px-3 rounded-full bg-muted/40 border border-border/40 flex items-center gap-2 flex-wrap">
+                    {/* Tone Pills */}
+                    <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider pl-1">Tone</span>
+                    <div className="flex gap-1">
+                      {toneOptions.map((tone) => (
+                        <button
+                          key={tone.id}
+                          onClick={() => setSelectedTone(tone.id)}
+                          className={`px-2.5 py-1 text-xs font-medium rounded-full transition-all duration-200 ${
+                            selectedTone === tone.id
+                              ? "bg-primary text-primary-foreground shadow-sm"
+                              : "bg-background/60 text-muted-foreground hover:bg-background hover:text-foreground"
+                          }`}
+                        >
+                          {tone.label.slice(0, 4)}
+                        </button>
+                      ))}
                     </div>
+
+                    <div className="w-px h-4 bg-border/60 mx-1" />
+
+                    {/* Length Pills */}
+                    <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Len</span>
+                    <div className="flex gap-1">
+                      {lengthOptions.map((length) => (
+                        <button
+                          key={length.id}
+                          onClick={() => setSelectedLength(length.id)}
+                          className={`px-2.5 py-1 text-xs font-medium rounded-full transition-all duration-200 ${
+                            selectedLength === length.id
+                              ? "bg-primary text-primary-foreground shadow-sm"
+                              : "bg-background/60 text-muted-foreground hover:bg-background hover:text-foreground"
+                          }`}
+                        >
+                          {length.label.charAt(0)}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex-1" />
+
+                    {/* Regenerate */}
+                    <button
+                      onClick={handleGenerate}
+                      className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-all duration-200"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      Regen
+                    </button>
                   </div>
 
                   <div className="bg-background/50 rounded-2xl p-8 mb-8 border border-primary/10">
