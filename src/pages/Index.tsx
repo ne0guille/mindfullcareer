@@ -13,10 +13,10 @@ const Index = () => {
   return (
     <ThemedLayout>
       <ThemedMasthead />
-      
+
       {/* Demo button for outreach modal */}
-      <div className="container max-w-4xl mx-auto px-4 py-8">
-        <Button 
+      <div className="container ">
+        <Button
           onClick={() => setIsModalOpen(true)}
           className="gap-2 rounded-xl bg-gradient-to-r from-accent-blue to-accent-violet hover:opacity-90 text-white border-0"
         >
@@ -28,7 +28,7 @@ const Index = () => {
       <ZenHomeDesign3 />
       <ThemedFooter />
 
-      <OutreachMessageModal 
+      <OutreachMessageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         jobTitle="Senior Frontend Engineer"
