@@ -32,6 +32,13 @@ export default {
         "rule-light": "hsl(var(--rule-light))",
         "stamp-red": "hsl(var(--stamp-red))",
         "highlight-yellow": "hsl(var(--highlight-yellow))",
+        // Multi-color accents
+        "accent-blue": "hsl(var(--accent-blue))",
+        "accent-violet": "hsl(var(--accent-violet))",
+        "accent-amber": "hsl(var(--accent-amber))",
+        "accent-rose": "hsl(var(--accent-rose))",
+        "accent-emerald": "hsl(var(--accent-emerald))",
+        "accent-slate": "hsl(var(--accent-slate))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

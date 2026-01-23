@@ -29,24 +29,32 @@
     --radius: 1rem;
 
     /* Custom zen colors */
-    --headline: 150 15% 15%;
-    --subheadline: 150 10% 35%;
+    --headline: 220 15% 15%;
+    --subheadline: 220 10% 35%;
     --paper-aged: 45 40% 95%;
-    --ink-faded: 150 10% 50%;
-    --rule-dark: 150 15% 40%;
-    --rule-light: 150 15% 80%;
-    --stamp-red: 150 45% 45%;
+    --ink-faded: 220 10% 50%;
+    --rule-dark: 220 15% 40%;
+    --rule-light: 220 15% 80%;
+    --stamp-red: 0 65% 50%;
     --highlight-yellow: 45 70% 85%;
 
+    /* Multi-color accent palette */
+    --accent-blue: 220 75% 55%;
+    --accent-violet: 260 65% 55%;
+    --accent-amber: 35 90% 55%;
+    --accent-rose: 350 75% 55%;
+    --accent-emerald: 160 65% 40%;
+    --accent-slate: 220 15% 45%;
+    
     /* Theme-specific */
-    --zen-leaf: 120 35% 45%;
-    --zen-stone: 30 10% 60%;
-    --zen-water: 200 40% 70%;
+    --zen-leaf: 160 45% 40%;
+    --zen-stone: 30 15% 55%;
+    --zen-water: 200 50% 55%;
     --zen-sand: 45 40% 90%;
     --zen-bamboo: 80 30% 50%;
-    --theme-glow: 150 45% 45%;
-    --theme-gradient-start: 150 20% 97%;
-    --theme-gradient-end: 45 30% 94%;
+    --theme-glow: 220 75% 55%;
+    --theme-gradient-start: 220 20% 98%;
+    --theme-gradient-end: 220 15% 95%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
