@@ -205,7 +205,7 @@ const FilterPill = ({
   </motion.button>
 );
 
-// Company Card Component
+// Company Card Component - Minimal + Hover Reveal
 const CompanyCard = ({
   company,
   index,
@@ -218,76 +218,87 @@ const CompanyCard = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: 0.1 + index * 0.08, type: "spring", stiffness: 100 }}
-      whileHover={{ y: -6, transition: { duration: 0.2 } }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.05 + index * 0.06, type: "spring", stiffness: 120 }}
       className="group"
     >
-      <div className="relative rounded-2xl bg-card border border-border/60 p-6 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-black/8 group-hover:border-border">
-        {/* Stacked Vertical Layout */}
-        <div className="flex flex-col items-center text-center">
-          {/* Company Icon */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
-            className={`w-16 h-16 rounded-2xl ${colors.light} flex items-center justify-center mb-4 border ${colors.border}`}
-          >
-            <Building2 className={`w-8 h-8 ${colors.text}`} />
-          </motion.div>
+      <Link to={`/company/${company.id}`}>
+        <div className="relative rounded-2xl bg-card border border-border/40 p-6 transition-all duration-300 
+          hover:shadow-xl hover:shadow-black/8 hover:border-border cursor-pointer overflow-hidden">
+          
+          {/* Minimal Default State */}
+          <div className="flex flex-col items-center text-center">
+            {/* Company Icon */}
+            <motion.div
+              className={`w-14 h-14 rounded-xl ${colors.light} flex items-center justify-center mb-4 border ${colors.border} 
+                transition-transform duration-300 group-hover:scale-110`}
+            >
+              <Building2 className={`w-7 h-7 ${colors.text}`} />
+            </motion.div>
 
-          {/* Company Name with Status Badge Inline */}
-          <div className="flex items-center justify-center gap-2 mb-1.5">
-            <h3 className="font-semibold text-foreground text-lg">
+            {/* Company Name */}
+            <h3 className="font-semibold text-foreground text-lg mb-1 group-hover:text-primary transition-colors duration-200">
               {company.name}
             </h3>
-            {isResearched ? (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-emerald/15 text-accent-emerald text-[10px] font-medium uppercase tracking-wide">
-                <Search className="w-2.5 h-2.5" />
-                Done
+
+            {/* Website - always visible */}
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Globe className="w-3.5 h-3.5" />
+              {company.website}
+            </div>
+          </div>
+
+          {/* Hover Reveal Panel */}
+          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/98 to-card/90 
+            flex flex-col items-center justify-center p-6
+            opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0
+            transition-all duration-300 ease-out">
+            
+            {/* Status Badge */}
+            <div className="mb-3">
+              {isResearched ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-emerald/15 text-accent-emerald text-xs font-medium">
+                  <Search className="w-3 h-3" />
+                  Researched
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-amber/15 text-accent-amber text-xs font-medium">
+                  <RefreshCw className="w-3 h-3" />
+                  Needs Update
+                </span>
+              )}
+            </div>
+
+            {/* Industry & Time */}
+            <div className="flex items-center gap-3 text-xs text-muted-foreground mb-5">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-muted/60">
+                <TrendingUp className="w-3 h-3" />
+                {company.industry}
               </span>
-            ) : (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-amber/15 text-accent-amber text-[10px] font-medium uppercase tracking-wide">
-                <RefreshCw className="w-2.5 h-2.5" />
-                Update
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {company.updatedAt}
               </span>
-            )}
-          </div>
+            </div>
 
-          {/* Website */}
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-3">
-            <Globe className="w-3.5 h-3.5" />
-            {company.website}
-          </div>
-
-          {/* Industry & Time Row */}
-          <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground mb-5">
-            <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-muted/50`}>
-              <TrendingUp className="w-3 h-3" />
-              {company.industry}
-            </span>
-            <span className="flex items-center gap-1 opacity-70">
-              <Clock className="w-3 h-3" />
-              {company.updatedAt}
-            </span>
-          </div>
-
-          {/* Outlined Dark Button */}
-          <Link to={`/company/${company.id}`} className="block w-full">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm
-                border-2 border-foreground/20 text-foreground/80
-                hover:border-foreground hover:text-foreground hover:bg-foreground/5
-                transition-all duration-200"
+            {/* Action Button */}
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full max-w-[180px]"
             >
-              <ExternalLink className="w-4 h-4" />
-              View Research
-            </motion.button>
-          </Link>
+              <span className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm
+                border-2 border-foreground/80 text-foreground bg-foreground/5
+                hover:bg-foreground hover:text-background
+                transition-all duration-200">
+                <ExternalLink className="w-4 h-4" />
+                View Research
+              </span>
+            </motion.div>
+          </div>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 };
