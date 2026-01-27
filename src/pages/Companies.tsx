@@ -221,79 +221,72 @@ const CompanyCard = ({
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.1 + index * 0.08, type: "spring", stiffness: 100 }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      whileHover={{ y: -6, transition: { duration: 0.2 } }}
       className="group"
     >
-      <div className={`relative rounded-3xl bg-card/80 backdrop-blur-sm border ${colors.border} p-6 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-black/5`}>
-        {/* Color accent bar */}
-        <div className={`absolute top-0 left-8 right-8 h-0.5 ${colors.accent} rounded-b-full opacity-40`} />
-        
-        {/* Header */}
-        <div className="flex items-start gap-4 mb-4">
-          {/* Company Icon with gradient */}
+      <div className="relative rounded-2xl bg-card border border-border/60 p-6 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-black/8 group-hover:border-border">
+        {/* Stacked Vertical Layout */}
+        <div className="flex flex-col items-center text-center">
+          {/* Company Icon */}
           <motion.div
-            whileHover={{ rotate: [0, -10, 10, 0] }}
-            transition={{ duration: 0.5 }}
-            className={`w-14 h-14 rounded-2xl ${colors.iconBg} flex items-center justify-center flex-shrink-0 border ${colors.border}`}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+            className={`w-16 h-16 rounded-2xl ${colors.light} flex items-center justify-center mb-4 border ${colors.border}`}
           >
-            <Building2 className={`w-7 h-7 ${colors.text}`} />
+            <Building2 className={`w-8 h-8 ${colors.text}`} />
           </motion.div>
 
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground text-lg mb-0.5 truncate">
+          {/* Company Name with Status Badge Inline */}
+          <div className="flex items-center justify-center gap-2 mb-1.5">
+            <h3 className="font-semibold text-foreground text-lg">
               {company.name}
             </h3>
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <Globe className="w-3.5 h-3.5" />
-              {company.website}
-            </div>
+            {isResearched ? (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-emerald/15 text-accent-emerald text-[10px] font-medium uppercase tracking-wide">
+                <Search className="w-2.5 h-2.5" />
+                Done
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-amber/15 text-accent-amber text-[10px] font-medium uppercase tracking-wide">
+                <RefreshCw className="w-2.5 h-2.5" />
+                Update
+              </span>
+            )}
           </div>
-        </div>
 
-        {/* Industry Tag */}
-        <div className="mb-4">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${colors.light} ${colors.text} text-xs font-medium`}>
-            <TrendingUp className="w-3 h-3" />
-            {company.industry}
-          </span>
-        </div>
+          {/* Website */}
+          <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-3">
+            <Globe className="w-3.5 h-3.5" />
+            {company.website}
+          </div>
 
-        {/* Status & Time */}
-        <div className="flex items-center justify-between mb-5">
-          {isResearched ? (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-medium">
-              <Search className="w-3.5 h-3.5" />
-              Researched
+          {/* Industry & Time Row */}
+          <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground mb-5">
+            <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-muted/50`}>
+              <TrendingUp className="w-3 h-3" />
+              {company.industry}
             </span>
-          ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-medium">
-              <RefreshCw className="w-3.5 h-3.5" />
-              Needs Refresh
+            <span className="flex items-center gap-1 opacity-70">
+              <Clock className="w-3 h-3" />
+              {company.updatedAt}
             </span>
-          )}
-          <span className="text-xs text-muted-foreground flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {company.updatedAt}
-          </span>
+          </div>
+
+          {/* Outlined Dark Button */}
+          <Link to={`/company/${company.id}`} className="block w-full">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm
+                border-2 border-foreground/20 text-foreground/80
+                hover:border-foreground hover:text-foreground hover:bg-foreground/5
+                transition-all duration-200"
+            >
+              <ExternalLink className="w-4 h-4" />
+              View Research
+            </motion.button>
+          </Link>
         </div>
-
-        {/* Action Button */}
-        <Link to={`/company/${company.id}`} className="block">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300
-              ${colors.light} ${colors.text} hover:${colors.accent} hover:text-white border ${colors.border}
-              group-hover:bg-opacity-80`}
-          >
-            <ExternalLink className="w-4 h-4" />
-            View Research
-          </motion.button>
-        </Link>
-
-        {/* Decorative corner element */}
-        <div className={`absolute bottom-4 right-4 w-8 h-8 rounded-full ${colors.light} opacity-50`} />
-        <div className={`absolute bottom-7 right-7 w-3 h-3 rounded-full ${colors.accent} opacity-30`} />
       </div>
     </motion.div>
   );
