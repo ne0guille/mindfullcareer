@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Building2, Search, RefreshCw, Plus, ExternalLink, Leaf, Clock, Sparkles, Globe, TrendingUp, Heart } from "lucide-react";
+import { Building2, Search, RefreshCw, Plus, ExternalLink, Leaf, Clock, Sparkles, Globe, TrendingUp, Heart, CheckCircle2, GraduationCap } from "lucide-react";
 import ThemedLayout from "@/components/ThemedLayout";
 import ThemedFooter from "@/components/ThemedFooter";
 import ZenContainer from "@/components/zen/ZenContainer";
@@ -20,12 +20,12 @@ const companyColors = [
 
 // Mock companies data with color index
 const mockCompanies = [
-  { id: "1", name: "Hogarth Worldwide", website: "hogarth.com", status: "researched", updatedAt: "1 day ago", industry: "Creative Agency", colorIndex: 0 },
-  { id: "2", name: "Zaelot Inc.", website: "zaelot.com", status: "needs-refresh", updatedAt: "7 days ago", industry: "Technology", colorIndex: 1 },
-  { id: "3", name: "Webflow", website: "webflow.co", status: "needs-refresh", updatedAt: "7 days ago", industry: "Design Tools", colorIndex: 2 },
-  { id: "4", name: "Pasito", website: "pasito.ai", status: "needs-refresh", updatedAt: "9 days ago", industry: "AI/ML", colorIndex: 3 },
-  { id: "5", name: "Félix Pago", website: "felixpago.com", status: "needs-refresh", updatedAt: "11 days ago", industry: "FinTech", colorIndex: 4 },
-  { id: "6", name: "Odiin", website: "odiin.tech", status: "needs-refresh", updatedAt: "11 days ago", industry: "SaaS", colorIndex: 5 },
+  { id: "1", name: "Hogarth Worldwide", website: "hogarth.com", status: "researched", coachingDone: true, updatedAt: "1 day ago", industry: "Creative Agency", colorIndex: 0 },
+  { id: "2", name: "Zaelot Inc.", website: "zaelot.com", status: "needs-refresh", coachingDone: false, updatedAt: "7 days ago", industry: "Technology", colorIndex: 1 },
+  { id: "3", name: "Webflow", website: "webflow.co", status: "researched", coachingDone: true, updatedAt: "7 days ago", industry: "Design Tools", colorIndex: 2 },
+  { id: "4", name: "Pasito", website: "pasito.ai", status: "researched", coachingDone: false, updatedAt: "9 days ago", industry: "AI/ML", colorIndex: 3 },
+  { id: "5", name: "Félix Pago", website: "felixpago.com", status: "needs-refresh", coachingDone: false, updatedAt: "11 days ago", industry: "FinTech", colorIndex: 4 },
+  { id: "6", name: "Odiin", website: "odiin.tech", status: "needs-refresh", coachingDone: false, updatedAt: "11 days ago", industry: "SaaS", colorIndex: 5 },
 ];
 
 type FilterType = "all" | "researched" | "needs-refresh";
@@ -226,6 +226,20 @@ const CompanyCard = ({
       <Link to={`/company/${company.id}`}>
         <div className="relative rounded-2xl bg-card border border-border/40 p-6 transition-all duration-300 
           hover:shadow-xl hover:shadow-black/8 hover:border-border cursor-pointer overflow-hidden">
+          
+          {/* Status Icons - Top Right Corner */}
+          <div className="absolute top-3 right-3 flex items-center gap-1.5">
+            {isResearched && (
+              <div className="w-7 h-7 rounded-full bg-accent-emerald/15 flex items-center justify-center" title="Researched">
+                <CheckCircle2 className="w-4 h-4 text-accent-emerald" />
+              </div>
+            )}
+            {company.coachingDone && (
+              <div className="w-7 h-7 rounded-full bg-accent-violet/15 flex items-center justify-center" title="Coaching Done">
+                <GraduationCap className="w-4 h-4 text-accent-violet" />
+              </div>
+            )}
+          </div>
           
           {/* Minimal Default State */}
           <div className="flex flex-col items-center text-center">
