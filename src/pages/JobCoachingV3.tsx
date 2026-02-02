@@ -5,6 +5,7 @@ import {
   Brain,
   FileText,
   MessageSquare,
+  Send,
   Sparkles,
   Target,
   TrendingUp,
@@ -22,7 +23,8 @@ import SkillMatchCard from "@/components/coaching-v3/SkillMatchCard";
 import GlowingSection from "@/components/coaching-v3/GlowingSection";
 import AnimatedKeywordCloud from "@/components/coaching-v3/AnimatedKeywordCloud";
 import InteractiveResumeBuilder from "@/components/coaching-v3/InteractiveResumeBuilder";
-import PriorityRadar from "@/components/coaching-v3/PriorityRadar";
+import HiddenPrioritiesGrid from "@/components/coaching-v3/HiddenPrioritiesGrid";
+import LinkedInOutreachV3 from "@/components/coaching-v3/LinkedInOutreachV3";
 import FloatingInsightOrb from "@/components/coaching-v3/FloatingInsightOrb";
 
 // Data
@@ -47,12 +49,6 @@ const JobCoachingV3 = () => {
     ...languageFingerprint.cultureSignals.slice(0, 4).map((w) => ({ word: w, count: 1, type: "culture" as const })),
   ];
 
-  // Transform priorities for radar
-  const radarPriorities = hiddenPriorities.map((p) => ({
-    keyword: p.keyword,
-    count: p.count,
-    insight: p.insight,
-  }));
 
   // Floating insights
   const floatingInsights = [
@@ -199,7 +195,7 @@ const JobCoachingV3 = () => {
               </div>
             </GlowingSection>
 
-            {/* Section 2: Hidden Priorities */}
+            {/* Section 2: Hidden Priorities - New Grid Layout */}
             <GlowingSection
               title="Hidden Priorities"
               subtitle="What they emphasize through repetition"
@@ -207,33 +203,7 @@ const JobCoachingV3 = () => {
               color="violet"
               delay={0.2}
             >
-              <div className="grid gap-8 md:grid-cols-2 items-center">
-                <PriorityRadar priorities={radarPriorities} />
-                <div className="space-y-4">
-                  {hiddenPriorities.map((priority, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.5 + i * 0.1 }}
-                      className="p-4 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50"
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="px-3 py-1 rounded-lg bg-accent-violet/10 text-accent-violet text-sm font-medium">
-                          {priority.keyword}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {priority.count}× mentions
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {priority.insight}
-                      </p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+              <HiddenPrioritiesGrid priorities={hiddenPriorities} />
             </GlowingSection>
 
             {/* Section 3: Language Fingerprint */}
@@ -278,6 +248,22 @@ const JobCoachingV3 = () => {
               delay={0.4}
             >
               <InteractiveResumeBuilder bullets={resumeBullets} />
+            </GlowingSection>
+
+            {/* Section 5: LinkedIn Outreach */}
+            <GlowingSection
+              title="LinkedIn Outreach"
+              subtitle="Personalized messages to connect with the team"
+              icon={Send}
+              color="blue"
+              delay={0.5}
+            >
+              <LinkedInOutreachV3
+                recipientName="Sarah Chen"
+                recipientRole="Engineering Manager"
+                companyName={job.company}
+                jobTitle={job.title}
+              />
             </GlowingSection>
           </div>
 
