@@ -23,7 +23,7 @@ import SkillMatchCard from "@/components/coaching-v3/SkillMatchCard";
 import GlowingSection from "@/components/coaching-v3/GlowingSection";
 import AnimatedKeywordCloud from "@/components/coaching-v3/AnimatedKeywordCloud";
 import InteractiveResumeBuilder from "@/components/coaching-v3/InteractiveResumeBuilder";
-import HiddenPrioritiesGrid from "@/components/coaching-v3/HiddenPrioritiesGrid";
+import PriorityBubbleCloud from "@/components/coaching-v3/PriorityBubbleCloud";
 import LinkedInOutreachV3 from "@/components/coaching-v3/LinkedInOutreachV3";
 import FloatingInsightOrb from "@/components/coaching-v3/FloatingInsightOrb";
 
@@ -195,15 +195,15 @@ const JobCoachingV3 = () => {
               </div>
             </GlowingSection>
 
-            {/* Section 2: Hidden Priorities - New Grid Layout */}
+            {/* Section 2: Hidden Priorities - Interactive Bubble Cloud */}
             <GlowingSection
               title="Hidden Priorities"
-              subtitle="What they emphasize through repetition"
+              subtitle="Click any bubble to reveal the insight behind it"
               icon={TrendingUp}
               color="violet"
               delay={0.2}
             >
-              <HiddenPrioritiesGrid priorities={hiddenPriorities} />
+              <PriorityBubbleCloud priorities={hiddenPriorities} />
             </GlowingSection>
 
             {/* Section 3: Language Fingerprint */}
