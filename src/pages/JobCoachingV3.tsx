@@ -12,6 +12,7 @@ import {
   TrendingUp,
   UserCheck,
   Zap,
+  Quote,
 } from "lucide-react";
 
 // Layout
@@ -39,7 +40,11 @@ import {
   domainExpertise,
   resumeBullets,
   roleGrowthPotential,
+  requirements,
 } from "@/data/coachingData";
+
+// Job detail components
+import RequirementItem from "@/components/job-detail/RequirementItem";
 
 const JobCoachingV3 = () => {
   const { id } = useParams();
@@ -198,24 +203,61 @@ const JobCoachingV3 = () => {
               </div>
             </GlowingSection>
 
-            {/* Section 2: What's Interesting - Growth Potential */}
+            {/* Section 2: What They Really Need */}
+            <GlowingSection
+              title="What They Really Need"
+              subtitle="Hidden signals decoded from the job posting"
+              icon={Target}
+              color="rose"
+              delay={0.15}
+            >
+              <div className="space-y-3">
+                {requirements.map((req, i) => (
+                  <RequirementItem
+                    key={i}
+                    text={req.text}
+                    priority={req.priority}
+                    matched={req.matched}
+                    insight={req.insight}
+                    delay={i * 0.1}
+                  />
+                ))}
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+                className="mt-6 p-4 rounded-2xl bg-accent-amber/10 border border-accent-amber/20"
+              >
+                <div className="flex items-start gap-3">
+                  <Quote className="w-5 h-5 text-accent-amber flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-foreground/80 italic">
+                    Job postings are "scar tissue" — every requirement hints at a past challenge or current need.
+                  </p>
+                </div>
+              </motion.div>
+            </GlowingSection>
+
+            {/* Section 3: What's Interesting - Growth Potential */}
             <GlowingSection
               title="What's Interesting"
               subtitle="Your growth trajectory in this role"
               icon={Rocket}
               color="violet"
-              delay={0.15}
+              delay={0.2}
             >
               <GrowthRevelationTimeline items={roleGrowthPotential} />
             </GlowingSection>
 
-            {/* Section 3: Hidden Priorities - Glassmorphic Cards */}
+            {/* Section 4: Hidden Priorities - Glassmorphic Cards */}
             <GlowingSection
               title="Hidden Priorities"
               subtitle="Click any card to reveal insights"
               icon={TrendingUp}
               color="amber"
-              delay={0.2}
+              delay={0.25}
             >
               <PriorityGlassCards priorities={hiddenPriorities} />
             </GlowingSection>
