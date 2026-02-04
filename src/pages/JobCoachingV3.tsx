@@ -5,6 +5,7 @@ import {
   Brain,
   FileText,
   MessageSquare,
+  Rocket,
   Send,
   Sparkles,
   Target,
@@ -26,6 +27,7 @@ import InteractiveResumeBuilder from "@/components/coaching-v3/InteractiveResume
 import PriorityGlassCards from "@/components/coaching-v3/PriorityGlassCards";
 import LinkedInOutreachV3 from "@/components/coaching-v3/LinkedInOutreachV3";
 import FloatingInsightOrb from "@/components/coaching-v3/FloatingInsightOrb";
+import GrowthRevelationTimeline from "@/components/coaching-v3/GrowthRevelationTimeline";
 
 // Data
 import { mockJobs } from "@/data/mockData";
@@ -36,6 +38,7 @@ import {
   softSkills,
   domainExpertise,
   resumeBullets,
+  roleGrowthPotential,
 } from "@/data/coachingData";
 
 const JobCoachingV3 = () => {
@@ -195,18 +198,29 @@ const JobCoachingV3 = () => {
               </div>
             </GlowingSection>
 
-            {/* Section 2: Hidden Priorities - Glassmorphic Cards */}
+            {/* Section 2: What's Interesting - Growth Potential */}
+            <GlowingSection
+              title="What's Interesting"
+              subtitle="Your growth trajectory in this role"
+              icon={Rocket}
+              color="violet"
+              delay={0.15}
+            >
+              <GrowthRevelationTimeline items={roleGrowthPotential} />
+            </GlowingSection>
+
+            {/* Section 3: Hidden Priorities - Glassmorphic Cards */}
             <GlowingSection
               title="Hidden Priorities"
               subtitle="Click any card to reveal insights"
               icon={TrendingUp}
-              color="violet"
+              color="amber"
               delay={0.2}
             >
               <PriorityGlassCards priorities={hiddenPriorities} />
             </GlowingSection>
 
-            {/* Section 3: Language Fingerprint */}
+            {/* Section 4: Language Fingerprint */}
             <GlowingSection
               title="Language Fingerprint"
               subtitle="Mirror their vocabulary naturally"
@@ -239,23 +253,23 @@ const JobCoachingV3 = () => {
               </motion.div>
             </GlowingSection>
 
-            {/* Section 4: Resume Transformation */}
+            {/* Section 5: Resume Transformation */}
             <GlowingSection
               title="Resume Transformation"
               subtitle="Click to transform each bullet with their keywords"
               icon={FileText}
-              color="amber"
+              color="emerald"
               delay={0.4}
             >
               <InteractiveResumeBuilder bullets={resumeBullets} />
             </GlowingSection>
 
-            {/* Section 5: LinkedIn Outreach */}
+            {/* Section 6: LinkedIn Outreach */}
             <GlowingSection
               title="LinkedIn Outreach"
               subtitle="Personalized messages to connect with the team"
               icon={Send}
-              color="blue"
+              color="rose"
               delay={0.5}
             >
               <LinkedInOutreachV3

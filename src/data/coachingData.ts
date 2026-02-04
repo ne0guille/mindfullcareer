@@ -86,6 +86,45 @@ export const hiddenPriorities = [
   },
 ];
 
+// Role Growth Potential data - What's Interesting section
+export const roleGrowthPotential = [
+  {
+    title: "Technical Leadership Path",
+    description: "The role mentions 'leading frontend initiatives' and 'mentoring junior developers' - signals for growth into a tech lead position.",
+    icon: "rocket" as const,
+    color: "violet" as const,
+    timeframe: "6-12 months",
+  },
+  {
+    title: "Cross-Functional Exposure",
+    description: "Working with product, design, and marketing teams opens doors to product management or UX roles if you're interested.",
+    icon: "users" as const,
+    color: "blue" as const,
+    timeframe: "Ongoing",
+  },
+  {
+    title: "Modern Tech Stack",
+    description: "They're investing in React 18, TypeScript, and modern tooling - skills highly transferable to top-tier companies.",
+    icon: "code" as const,
+    color: "emerald" as const,
+    timeframe: "Immediate",
+  },
+  {
+    title: "Accessibility Expertise",
+    description: "WCAG 2.1 focus means you'll build specialized a11y knowledge - a rare and increasingly valued skill.",
+    icon: "accessibility" as const,
+    color: "amber" as const,
+    timeframe: "3-6 months",
+  },
+  {
+    title: "Industry Domain Knowledge",
+    description: "Hospitality tech experience opens doors to travel, booking, and ecommerce sectors with competitive salaries.",
+    icon: "globe" as const,
+    color: "rose" as const,
+    timeframe: "1-2 years",
+  },
+];
+
 // Technical Skills data
 export const technicalSkills = [
   {
