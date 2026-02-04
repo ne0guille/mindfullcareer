@@ -147,7 +147,7 @@ const GrowthRevelationTimeline = ({ items }: GrowthRevelationTimelineProps) => {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory cursor-grab active:cursor-grabbing"
+        className="flex gap-4 overflow-x-auto overflow-y-visible py-4 -my-4 px-2 -mx-2 snap-x snap-mandatory cursor-grab active:cursor-grabbing"
         style={{ 
           scrollbarWidth: "none", 
           msOverflowStyle: "none",
