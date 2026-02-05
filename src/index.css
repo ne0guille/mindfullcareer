@@ -65,6 +65,122 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Career Chronicle Theme - Retro Newspaper */
+  .theme-chronicle {
+    --background: 40 30% 96%;
+    --foreground: 30 10% 15%;
+    --card: 40 35% 98%;
+    --card-foreground: 30 10% 15%;
+    --popover: 40 35% 98%;
+    --popover-foreground: 30 10% 15%;
+    --primary: 30 50% 35%;
+    --primary-foreground: 40 30% 98%;
+    --secondary: 40 25% 90%;
+    --secondary-foreground: 30 10% 20%;
+    --muted: 40 20% 92%;
+    --muted-foreground: 30 10% 40%;
+    --accent: 0 60% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 20% 80%;
+    --input: 40 20% 88%;
+    --ring: 30 50% 35%;
+    --radius: 0.25rem;
+
+    --headline: 30 15% 10%;
+    --subheadline: 30 10% 30%;
+    --paper-aged: 40 40% 94%;
+    --ink-faded: 30 10% 45%;
+    --rule-dark: 30 15% 35%;
+    --rule-light: 40 15% 75%;
+    --stamp-red: 0 70% 45%;
+    --highlight-yellow: 50 80% 80%;
+
+    --accent-blue: 220 60% 45%;
+    --accent-violet: 260 50% 45%;
+    --accent-amber: 35 85% 50%;
+    --accent-rose: 350 65% 50%;
+    --accent-emerald: 160 55% 35%;
+    --accent-slate: 30 15% 40%;
+    
+    --zen-leaf: 160 45% 40%;
+    --zen-stone: 30 20% 50%;
+    --zen-water: 200 45% 50%;
+    --zen-sand: 40 35% 88%;
+    --zen-bamboo: 80 25% 45%;
+    --theme-glow: 30 50% 35%;
+    --theme-gradient-start: 40 30% 97%;
+    --theme-gradient-end: 40 25% 93%;
+
+    --sidebar-background: 40 30% 96%;
+    --sidebar-foreground: 30 10% 20%;
+    --sidebar-primary: 30 50% 35%;
+    --sidebar-primary-foreground: 40 30% 98%;
+    --sidebar-accent: 40 25% 92%;
+    --sidebar-accent-foreground: 30 10% 15%;
+    --sidebar-border: 40 20% 82%;
+    --sidebar-ring: 30 50% 35%;
+  }
+
+  /* CyberHunt AI Theme - Futuristic Sci-Fi */
+  .theme-cyber {
+    --background: 230 25% 8%;
+    --foreground: 220 15% 90%;
+    --card: 230 30% 12%;
+    --card-foreground: 220 15% 90%;
+    --popover: 230 30% 12%;
+    --popover-foreground: 220 15% 90%;
+    --primary: 180 100% 50%;
+    --primary-foreground: 230 25% 8%;
+    --secondary: 260 70% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 230 20% 18%;
+    --muted-foreground: 220 15% 60%;
+    --accent: 180 100% 50%;
+    --accent-foreground: 230 25% 8%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 230 20% 25%;
+    --input: 230 20% 20%;
+    --ring: 180 100% 50%;
+    --radius: 0.5rem;
+
+    --headline: 220 15% 95%;
+    --subheadline: 220 15% 70%;
+    --paper-aged: 230 25% 15%;
+    --ink-faded: 220 15% 55%;
+    --rule-dark: 180 60% 40%;
+    --rule-light: 230 20% 30%;
+    --stamp-red: 0 80% 55%;
+    --highlight-yellow: 60 90% 60%;
+
+    --accent-blue: 200 100% 60%;
+    --accent-violet: 280 80% 65%;
+    --accent-amber: 45 100% 55%;
+    --accent-rose: 340 85% 60%;
+    --accent-emerald: 160 80% 50%;
+    --accent-slate: 220 20% 50%;
+    
+    --zen-leaf: 160 80% 50%;
+    --zen-stone: 230 15% 40%;
+    --zen-water: 200 90% 55%;
+    --zen-sand: 230 20% 22%;
+    --zen-bamboo: 120 50% 50%;
+    --theme-glow: 180 100% 50%;
+    --theme-gradient-start: 230 25% 10%;
+    --theme-gradient-end: 240 30% 15%;
+
+    --sidebar-background: 230 25% 10%;
+    --sidebar-foreground: 220 15% 85%;
+    --sidebar-primary: 180 100% 50%;
+    --sidebar-primary-foreground: 230 25% 8%;
+    --sidebar-accent: 230 25% 18%;
+    --sidebar-accent-foreground: 220 15% 90%;
+    --sidebar-border: 230 20% 25%;
+    --sidebar-ring: 180 100% 50%;
+  }
 }
 
 @layer base {

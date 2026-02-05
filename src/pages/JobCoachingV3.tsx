@@ -18,6 +18,7 @@ import {
 // Layout
 import ThemedLayout from "@/components/ThemedLayout";
 import ThemedFooter from "@/components/ThemedFooter";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 // V3 Components
 import HeroMatchReveal from "@/components/coaching-v3/HeroMatchReveal";
@@ -124,6 +125,11 @@ const JobCoachingV3 = () => {
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Back to job details
             </Link>
+            
+            {/* Theme Switcher */}
+            <div className="fixed top-20 right-4 z-50">
+              <ThemeSwitcher />
+            </div>
           </motion.div>
 
           {/* Hero Match Reveal */}
