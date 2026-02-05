@@ -211,7 +211,7 @@ const JobCoachingV3 = () => {
               color="rose"
               delay={0.15}
             >
-              <div className="space-y-3">
+              <div className="grid gap-2 md:grid-cols-2">
                 {requirements.map((req, i) => (
                   <RequirementItem
                     key={i}
@@ -219,7 +219,8 @@ const JobCoachingV3 = () => {
                     priority={req.priority}
                     matched={req.matched}
                     insight={req.insight}
-                    delay={i * 0.1}
+                    delay={i * 0.05}
+                    compact
                   />
                 ))}
               </div>
